@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOXX — Communication Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060708;--s1:#0a0b0d;--s2:#0f1114;--s3:#151719;--s4:#1c1f23;
+  --border:#222529;--border2:#2d3136;
+  --gold:#c8a84b;--gold2:#e2c06a;--gold3:#f0d898;
+  --green:#2ecc71;--green2:#27ae60;
+  --red:#e74c3c;--red2:#c0392b;
+  --blue:#3498db;--orange:#e67e22;
+  --text:#e8e2d8;--muted:#5a5f68;--dim:#1e2126;
+  --fnt-h:'Bebas Neue',sans-serif;
+  --fnt-b:'Fraunces',serif;
+  --fnt-m:'IBM Plex Mono',monospace;
+  --fnt-d:'Playfair Display',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fnt-b);font-size:16px;line-height:1.7;min-height:100vh;overflow-x:hidden}
+
+/* PAPER TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--s1)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:0}
+
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 36px;border-bottom:1px solid var(--border);background:rgba(6,7,8,.97);position:sticky;top:0;z-index:600;backdrop-filter:blur(16px)}
+.logo{font-family:var(--fnt-h);font-size:26px;letter-spacing:8px;color:var(--gold)}
+.logo-sub{font-family:var(--fnt-m);font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:block;margin-top:-4px}
+.hd-right{display:flex;align-items:center;gap:24px}
+.hd-stat{text-align:center}
+.hd-stat .v{font-family:var(--fnt-h);font-size:20px;letter-spacing:2px;color:var(--gold);line-height:1}
+.hd-stat .l{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+/* ── LAYOUT ── */
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 61px)}
+
+/* ── SIDEBAR ── */
+.sidebar{border-right:1px solid var(--border);padding:20px 12px;position:sticky;top:61px;height:calc(100vh - 61px);overflow-y:auto;background:var(--s1)}
+.sidebar::-webkit-scrollbar{width:2px}
+.sb-section{margin-bottom:20px}
+.sb-lbl{font-family:var(--fnt-m);font-size:7px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;padding-left:6px}
+.sb-link{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;border-left:2px solid transparent;margin-bottom:2px;font-family:var(--fnt-m)}
+.sb-link:hover{color:var(--text);border-left-color:var(--gold);background:rgba(200,168,75,.04)}
+.sb-link.active{color:var(--gold);border-left-color:var(--gold);background:rgba(200,168,75,.06)}
+.days-grid{display:flex;flex-wrap:wrap;gap:3px;padding:0 4px}
+.dg-btn{width:26px;height:26px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--fnt-m);font-size:8px;cursor:pointer;transition:all .15s}
+.dg-btn:hover{border-color:var(--gold);color:var(--gold)}
+.dg-btn.active{border-color:var(--gold);background:var(--gold);color:#000;font-weight:500}
+.dg-btn.done{border-color:var(--green2);color:var(--green)}
+
+/* ── MAIN ── */
+.main{padding:28px 40px 80px;max-width:900px}
+
+/* ── SCREENS ── */
+.screen{display:none}.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeUp .35s ease both}
+
+/* ── WELCOME ── */
+.hero{margin-bottom:40px}
+.hero h1{font-family:var(--fnt-h);font-size:clamp(56px,8vw,96px);line-height:.9;letter-spacing:3px;margin-bottom:16px}
+.hero h1 .acc{color:var(--gold)}
+.hero p{font-size:17px;color:var(--muted);font-style:italic;max-width:480px;margin-bottom:32px}
+.feat-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px}
+.feat-card{background:var(--s2);border:1px solid var(--border);border-top:2px solid var(--gold);padding:16px}
+.feat-card .f-ic{font-size:20px;margin-bottom:8px}
+.feat-card h3{font-family:var(--fnt-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.feat-card p{font-size:12px;color:var(--muted);line-height:1.55}
+.name-row{display:flex;gap:10px;align-items:center}
+.name-row input{background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--fnt-b);font-size:16px;padding:12px 16px;outline:none;width:240px;transition:border .2s}
+.name-row input:focus{border-color:var(--gold)}
+
+/* ── SESSION ── */
+.prog-bar{height:2px;background:var(--border);margin-bottom:20px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s}
+.phase-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:var(--s2);border:1px solid var(--border);padding:12px 16px;margin-bottom:20px}
+.ps-item label{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px}
+.ps-item span{font-family:var(--fnt-d);font-size:13px;color:var(--text);font-style:italic}
+.sess-head{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.s-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;padding:3px 8px;border:1px solid var(--border2);color:var(--muted);text-transform:uppercase}
+.tag.g{border-color:var(--gold);color:var(--gold)}
+.tag.gr{border-color:var(--green);color:var(--green)}
+.tag.r{border-color:var(--red);color:var(--red)}
+.s-title{font-family:var(--fnt-d);font-size:26px;font-style:italic}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;gap:0}
+.tab-btn{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:10px 16px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;margin-bottom:-1px;white-space:nowrap}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* LESSON */
+.lesson-block{margin-bottom:22px}
+.lb-lbl{font-family:var(--fnt-m);font-size:7px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.lb-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.lb-body{background:var(--s2);border:1px solid var(--border);padding:18px 20px;font-size:15px;line-height:1.8}
+.lb-body h3{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:14px 0 6px}
+.lb-body h3:first-child{margin-top:0}
+.lb-body p{margin-bottom:10px;color:var(--text)}.lb-body p:last-child{margin-bottom:0}
+.lb-body ul{padding-left:16px;margin-bottom:10px}
+.lb-body ul li{margin-bottom:4px;font-size:14px}
+.lb-body .ex{border-left:2px solid var(--gold);padding:9px 14px;background:rgba(200,168,75,.05);font-style:italic;color:var(--gold3);margin:10px 0;font-size:14px}
+.lb-body .rule{border:1px solid var(--gold);padding:10px 14px;background:rgba(200,168,75,.04);color:var(--gold2);font-family:var(--fnt-m);font-size:10px;margin-top:14px}
+
+/* ══════════════════════════════════════
+   DRILL ZONE — THE CORE FEATURE
+══════════════════════════════════════ */
+.drill-card{background:var(--s2);border:1px solid var(--border);border-top:2px solid var(--gold);margin-bottom:16px}
+.drill-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.drill-head h3{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.drill-head span{font-family:var(--fnt-m);font-size:8px;color:var(--muted)}
+.drill-prompt{font-size:15px;padding:14px 18px;background:var(--s3);border-left:2px solid var(--gold);margin:14px 18px;line-height:1.75}
+.drill-prompt strong{color:var(--gold)}
+
+/* MIC ZONE */
+.mic-zone{background:var(--s3);border:1px solid var(--border2);padding:16px 18px;margin:0 18px 14px}
+.mz-title{font-family:var(--fnt-m);font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.mz-main{display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.big-mic{width:72px;height:72px;border-radius:50%;border:2px solid var(--border2);background:var(--s2);color:var(--muted);font-size:28px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.big-mic:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.08)}
+.big-mic.rec{border-color:var(--red);color:var(--red);background:rgba(231,76,60,.1);animation:mic-pulse 1.5s ease-in-out infinite}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 3px rgba(231,76,60,.2),0 0 0 8px rgba(231,76,60,.07)}50%{box-shadow:0 0 0 8px rgba(231,76,60,.15),0 0 0 16px rgba(231,76,60,.04)}}
+.mic-info{flex:1}
+.mic-state{font-family:var(--fnt-m);font-size:10px;color:var(--muted);margin-bottom:4px}
+.mic-state.live{color:var(--red)}
+.mic-state.done{color:var(--green)}
+.mic-timer{font-family:var(--fnt-h);font-size:32px;letter-spacing:3px;color:var(--red);line-height:1}
+.mic-timer.hide{display:none}
+.wave-wrap{height:40px;margin-bottom:10px;display:none}
+.wave-wrap.show{display:block}
+canvas.wave{width:100%;height:40px;display:block;background:var(--s2);border:1px solid var(--border)}
+.playback-row{display:none;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--border);padding:10px 12px;margin-bottom:10px}
+.playback-row.show{display:flex}
+.play-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.play-btn:hover{background:rgba(200,168,75,.15)}
+.pb-info{font-family:var(--fnt-m);font-size:10px;color:var(--muted);flex:1}
+.pb-info b{color:var(--text)}
+
+/* TRANSCRIPT */
+.transcript-area{margin-bottom:10px}
+.ta-label{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between}
+.ta-label .live-badge{background:rgba(46,204,113,.15);border:1px solid var(--green2);color:var(--green);font-size:7px;padding:1px 6px}
+textarea.transcript{width:100%;background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--fnt-b);font-size:14px;padding:12px;outline:none;resize:vertical;min-height:90px;transition:border .2s;line-height:1.7}
+textarea.transcript:focus{border-color:var(--gold)}
+
+/* ══ CHECKLIST ══ */
+.checklist{margin:0 18px 14px}
+.cl-label{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cl-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cl-item{display:flex;align-items:center;gap:8px;background:var(--s3);border:1px solid var(--border);padding:9px 11px;cursor:pointer;transition:border .15s;font-size:13px}
+.cl-item:hover{border-color:var(--gold)}
+.cl-item input{accent-color:var(--gold);flex-shrink:0}
+.cl-item.checked{border-color:var(--green);background:rgba(46,204,113,.05)}
+
+/* ANALYSE BUTTON */
+.analyse-row{padding:0 18px 18px;display:flex;gap:10px;flex-wrap:wrap}
+.btn-analyse{font-family:var(--fnt-h);font-size:15px;letter-spacing:4px;padding:13px 28px;background:var(--gold);color:#000;border:none;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.btn-analyse:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-analyse:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-ghost{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;padding:9px 14px;background:transparent;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .2s;text-transform:uppercase}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-green{background:var(--green2);color:#fff;font-family:var(--fnt-h);font-size:13px;letter-spacing:3px;padding:12px 22px;border:none;cursor:pointer;transition:background .2s}
+.btn-green:hover{background:var(--green)}
+
+/* ══════════════════════════════════════
+   FEEDBACK ENGINE — THE NEW CORE
+══════════════════════════════════════ */
+.feedback-engine{background:var(--s1);border:1px solid var(--border);margin:0 18px 18px;display:none}
+.feedback-engine.show{display:block}
+
+/* SCORE HEADER */
+.fe-score-bar{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.fe-overall{padding:20px 24px;background:var(--s2);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:120px}
+.fe-overall .score-num{font-family:var(--fnt-h);font-size:52px;letter-spacing:2px;line-height:1}
+.fe-overall .score-label{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.fe-overall .score-grade{font-family:var(--fnt-h);font-size:14px;letter-spacing:3px;margin-top:6px}
+.fe-dims{flex:1;padding:14px 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fe-dim{display:flex;flex-direction:column;gap:3px}
+.fe-dim-name{font-family:var(--fnt-m);font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.fe-dim-track{height:4px;background:var(--border);overflow:hidden}
+.fe-dim-fill{height:100%;transition:width 1s ease}
+.fe-dim-val{font-family:var(--fnt-m);font-size:8px;text-align:right}
+
+/* FILLER SECTION */
+.fe-section{border-bottom:1px solid var(--border);padding:16px 20px}
+.fe-section:last-child{border-bottom:none}
+.fe-section-title{font-family:var(--fnt-m);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.fe-section-title .count-badge{background:rgba(200,168,75,.1);border:1px solid var(--gold);padding:1px 8px;font-size:8px;color:var(--gold)}
+.filler-map{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.filler-chip{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#e07a7a;font-family:var(--fnt-m);font-size:10px;padding:3px 8px;display:flex;align-items:center;gap:5px}
+.filler-chip .fc-count{background:rgba(231,76,60,.25);padding:0 5px;font-weight:500}
+.filler-clean{color:var(--green);font-family:var(--fnt-m);font-size:11px}
+
+/* WHAT WENT WRONG */
+.issue-list{display:flex;flex-direction:column;gap:8px}
+.issue-row{display:flex;gap:12px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-left:3px solid}
+.issue-row.sev-critical{border-left-color:var(--red)}
+.issue-row.sev-high{border-left-color:var(--orange)}
+.issue-row.sev-medium{border-left-color:var(--gold)}
+.issue-row.sev-low{border-left-color:var(--blue)}
+.issue-row.sev-pass{border-left-color:var(--green)}
+.ir-icon{font-size:14px;flex-shrink:0;margin-top:2px}
+.ir-body h4{font-family:var(--fnt-m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:3px}
+.ir-body .what{font-size:13px;color:var(--muted);margin-bottom:4px;line-height:1.6}
+.ir-body .how{font-size:12px;color:var(--gold2);font-family:var(--fnt-m);line-height:1.6}
+.ir-body .example{font-size:12px;color:#a0e8ff;font-style:italic;margin-top:4px;padding:6px 10px;background:rgba(52,152,219,.07);border-left:2px solid var(--blue)}
+
+/* ELITE REWRITE */
+.rewrite-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rw-panel{background:var(--s2);border:1px solid var(--border);padding:14px}
+.rw-label{font-family:var(--fnt-m);font-size:7px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.rw-label.before-lbl{color:var(--red)}
+.rw-label.after-lbl{color:var(--green)}
+.rw-text{font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text)}
+.rw-text.after-text{color:#a8ffc4;font-style:italic}
+.copy-btn{font-family:var(--fnt-m);font-size:8px;letter-spacing:2px;padding:7px 14px;background:transparent;border:1px solid var(--green2);color:var(--green);cursor:pointer;transition:all .2s;margin-top:10px;text-transform:uppercase;width:100%}
+.copy-btn:hover{background:rgba(46,204,113,.08)}
+
+/* WHAT TO DO NEXT */
+.next-steps{display:flex;flex-direction:column;gap:8px}
+.ns-item{display:flex;gap:12px;padding:10px 14px;background:var(--s2);border:1px solid var(--border)}
+.ns-num{font-family:var(--fnt-h);font-size:24px;letter-spacing:2px;color:var(--gold);flex-shrink:0;line-height:1;margin-top:2px}
+.ns-content h4{font-family:var(--fnt-m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:3px}
+.ns-content p{font-size:13px;color:var(--muted);line-height:1.6}
+.ns-content .drill-cue{font-family:var(--fnt-m);font-size:10px;color:var(--gold);margin-top:4px}
+
+/* COMPLETE ROW */
+.complete-row{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px;background:var(--s2);border-top:1px solid var(--border);align-items:center}
+
+/* SCRIPT TAB */
+.script-card{background:var(--s2);border:1px solid var(--border);border-top:2px solid var(--gold);padding:20px;margin-bottom:14px}
+.script-card h3{font-family:var(--fnt-d);font-size:18px;font-style:italic;margin-bottom:4px;color:var(--gold2)}
+.script-card .by{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--muted);margin-bottom:12px}
+.script-card .body{font-size:15px;line-height:1.9;font-style:italic;color:var(--text)}
+.script-card .body em{color:var(--gold3);font-style:normal;font-weight:400}
+.practice-note{font-family:var(--fnt-m);font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6}
+
+/* PROGRESS TAB */
+.prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.pg-card{background:var(--s2);border:1px solid var(--border);padding:14px;text-align:center}
+.pg-card .big{font-family:var(--fnt-h);font-size:36px;letter-spacing:3px;color:var(--gold)}
+.pg-card .lbl{font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.heatmap{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:20px}
+.hm-cell{width:24px;height:24px;border:1px solid var(--border);font-family:var(--fnt-m);font-size:7px;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.hm-cell:hover{border-color:var(--gold)}
+.hm-cell.done{background:rgba(46,204,113,.15);border-color:var(--green2);color:var(--green)}
+.hm-cell.cur{background:var(--gold);border-color:var(--gold);color:#000;font-weight:700}
+
+/* MOBILE */
+@media(max-width:700px){
+  .shell{grid-template-columns:1fr}.sidebar{display:none}
+  .main{padding:16px 14px 60px}
+  header{padding:10px 14px}
+  .feat-3{grid-template-columns:1fr}.phase-strip{grid-template-columns:1fr 1fr}
+  .cl-grid{grid-template-columns:1fr}.rewrite-split{grid-template-columns:1fr}
+  .fe-dims{grid-template-columns:1fr}.fe-score-bar{flex-direction:column}
+  .prog-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">VOXX</div>
+    <div class="logo-sub">60-Day Communication Mastery</div>
+  </div>
+  <div class="hd-right">
+    <div class="hd-stat"><div class="v" id="hd-day">—</div><div class="l">Day</div></div>
+    <div class="hd-stat"><div class="v" id="hd-streak">0</div><div class="l">Streak</div></div>
+    <div class="hd-stat"><div class="v" id="hd-score">—</div><div class="l">Last Score</div></div>
+  </div>
+</header>
+
+<div class="shell">
+<aside class="sidebar">
+  <div class="sb-section">
+    <div class="sb-lbl">Navigate</div>
+    <div class="sb-link active" onclick="showMain('session')">📅 Today's Session</div>
+    <div class="sb-link" onclick="showMain('progress')">📊 Progress</div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-lbl">All 60 Days</div>
+    <div class="days-grid" id="sb-days"></div>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ══ WELCOME ══ -->
+<div id="sc-welcome" class="screen active fade">
+  <div class="hero">
+    <h1>MASTER<br>THE <span class="acc">ART</span><br>OF COMMAND.</h1>
+    <p>60 days. Elite techniques. Real-time speech analysis. Deep feedback on every drill — free, offline, forever.</p>
+  </div>
+  <div class="feat-3">
+    <div class="feat-card"><div class="f-ic">🎙</div><h3>Live Voice Recording</h3><p>Speak your drills aloud. Playback to hear yourself. Transcript captured automatically where supported.</p></div>
+    <div class="feat-card"><div class="f-ic">🔬</div><h3>Deep Analysis Engine</h3><p>8-dimension scoring: pace, fillers, structure, clarity, technique, confidence, brevity, and impact. Every session.</p></div>
+    <div class="feat-card"><div class="f-ic">📈</div><h3>Elite Rewrite</h3><p>Every response gets rewritten at elite level so you can see exactly what the improvement looks like.</p></div>
+  </div>
+  <div class="name-row">
+    <input id="usr-name" type="text" placeholder="Your name (optional)…" maxlength="40">
+    <button class="btn-analyse" onclick="beginProgram()" style="font-size:14px;padding:12px 24px">START DAY 1 →</button>
+  </div>
+  <p style="margin-top:12px;font-family:var(--fnt-m);font-size:9px;color:var(--muted)">No API key · No sign-up · Works on desktop Chrome/Edge · All data saved in browser</p>
+</div>
+
+<!-- ══ SESSION ══ -->
+<div id="sc-session" class="screen">
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="phase-strip">
+    <div class="ps-item"><label>Phase</label><span id="ps-phase">—</span></div>
+    <div class="ps-item"><label>Speaker Model</label><span id="ps-speaker">—</span></div>
+    <div class="ps-item"><label>Technique</label><span id="ps-tech">—</span></div>
+    <div class="ps-item"><label>Topic</label><span id="ps-topic">—</span></div>
+  </div>
+  <div class="sess-head">
+    <div class="s-tags">
+      <span class="tag g" id="tag-day">Day 1</span>
+      <span class="tag" id="tag-phase">Phase 1</span>
+      <span class="tag gr" id="tag-tech">—</span>
+    </div>
+    <div class="s-title" id="s-title">—</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="tab('lesson',this)">📖 Lesson</button>
+    <button class="tab-btn" onclick="tab('drill',this)">🎙 Drill</button>
+    <button class="tab-btn" onclick="tab('pressure',this)">⚡ Pressure</button>
+    <button class="tab-btn" onclick="tab('script',this)">📜 Script</button>
+    <button class="tab-btn" onclick="tab('progress',this)">📊 Progress</button>
+  </div>
+
+  <!-- LESSON -->
+  <div id="tab-lesson" class="tab-panel active">
+    <div class="lesson-block"><div class="lb-lbl">Presence Calibration</div><div class="lb-body" id="les-cal"></div></div>
+    <div class="lesson-block"><div class="lb-lbl">Technique of the Day</div><div class="lb-body" id="les-tech"></div></div>
+    <div style="margin-top:14px"><button class="btn-analyse" style="font-size:13px;padding:11px 22px" onclick="tab('drill',null)">Go to Drill →</button></div>
+  </div>
+
+  <!-- DRILL -->
+  <div id="tab-drill" class="tab-panel">
+    <div class="drill-card">
+      <div class="drill-head"><h3>🎙 Core Speaking Drill</h3><span id="drill-target">60–120 seconds</span></div>
+      <div class="drill-prompt" id="drill-prompt"></div>
+
+      <div class="mic-zone" id="drill-mic-zone">
+        <div class="mz-title">Voice Recording <span id="drill-mic-hint" style="color:var(--muted);font-size:8px">Tap mic → speak → tap to stop</span></div>
+        <div class="mz-main">
+          <button class="big-mic" id="drill-mic-btn" onclick="toggleMic('drill')">🎙</button>
+          <div class="mic-info">
+            <div class="mic-state" id="drill-mic-state">Tap the mic to begin recording</div>
+            <div class="mic-timer hide" id="drill-mic-timer">0:00</div>
+          </div>
+        </div>
+        <div class="wave-wrap" id="drill-wave-wrap"><canvas class="wave" id="drill-wave" height="40"></canvas></div>
+        <div class="playback-row" id="drill-playback">
+          <button class="play-btn" onclick="doPlayback('drill')" id="drill-play-btn">▶</button>
+          <div class="pb-info"><div><b id="drill-pb-dur">—</b> recorded</div><div>Listen to yourself · identify weak moments</div></div>
+          <audio id="drill-audio"></audio>
+        </div>
+        <div class="transcript-area">
+          <div class="ta-label">Your transcript <span class="live-badge" id="drill-live-badge" style="display:none">● LIVE</span></div>
+          <textarea class="transcript" id="drill-transcript" placeholder="Speak using the mic above — transcript appears here automatically (Chrome/Edge)&#10;&#10;On other browsers: type what you said so the feedback engine can analyse it."></textarea>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div class="cl-label">Self-assessment (before you submit)</div>
+        <div class="cl-grid" id="drill-checklist">
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Applied the technique consciously</label>
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Zero filler words (um, uh, like…)</label>
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Spoke slowly — slower than felt comfortable</label>
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Paused before my two key points</label>
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Had a clear opening and closing sentence</label>
+          <label class="cl-item"><input type="checkbox" onchange="chk(this)"> Stayed under 120 seconds without rambling</label>
+        </div>
+      </div>
+
+      <div class="analyse-row">
+        <button class="btn-analyse" onclick="analyseResponse('drill')">Analyse My Response →</button>
+        <button class="btn-ghost" onclick="skipDrill()">Skip drill</button>
+        <button class="btn-ghost" onclick="resetDrill('drill')">↺ Redo</button>
+      </div>
+
+      <!-- ══ FEEDBACK ENGINE ══ -->
+      <div class="feedback-engine" id="drill-feedback">
+
+        <!-- SCORE HEADER -->
+        <div class="fe-score-bar">
+          <div class="fe-overall">
+            <div class="score-num" id="fe-overall-num">—</div>
+            <div class="score-label">Overall Score</div>
+            <div class="score-grade" id="fe-overall-grade">—</div>
+          </div>
+          <div class="fe-dims" id="fe-dims"></div>
+        </div>
+
+        <!-- FILLER ANALYSIS -->
+        <div class="fe-section">
+          <div class="fe-section-title">🔍 Filler Word Analysis <span class="count-badge" id="fe-filler-count">0 detected</span></div>
+          <div class="filler-map" id="fe-filler-map"></div>
+          <div id="fe-filler-advice" style="font-size:13px;color:var(--muted);line-height:1.7"></div>
+        </div>
+
+        <!-- PACE ANALYSIS -->
+        <div class="fe-section">
+          <div class="fe-section-title">⏱ Pace & Delivery Analysis</div>
+          <div id="fe-pace-detail" style="font-size:14px;line-height:1.8"></div>
+        </div>
+
+        <!-- WHAT WENT WRONG + HOW TO FIX -->
+        <div class="fe-section">
+          <div class="fe-section-title">❌ Issues Found — What Went Wrong & How to Fix It</div>
+          <div class="issue-list" id="fe-issues"></div>
+        </div>
+
+        <!-- ELITE REWRITE -->
+        <div class="fe-section">
+          <div class="fe-section-title">✨ Elite Rewrite — What Your Response Should Have Sounded Like</div>
+          <div style="font-family:var(--fnt-m);font-size:8px;color:var(--muted);margin-bottom:10px;letter-spacing:1px">↓ Study the structure, word choice, and pacing of the elite version</div>
+          <div class="rewrite-split">
+            <div class="rw-panel">
+              <div class="rw-label before-lbl">▼ Your Version</div>
+              <div class="rw-text" id="fe-your-text"></div>
+            </div>
+            <div class="rw-panel">
+              <div class="rw-label after-lbl">▲ Elite Version</div>
+              <div class="rw-text after-text" id="fe-elite-text"></div>
+              <button class="copy-btn" onclick="copyElite()">COPY ELITE VERSION</button>
+            </div>
+          </div>
+          <div style="margin-top:12px;background:var(--s3);border-left:2px solid var(--gold);padding:12px 14px">
+            <div style="font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--gold);margin-bottom:6px;text-transform:uppercase">Why the Elite Version Works Better</div>
+            <div id="fe-why-better" style="font-size:13px;color:var(--text);line-height:1.75"></div>
+          </div>
+        </div>
+
+        <!-- WHAT TO DO NEXT -->
+        <div class="fe-section">
+          <div class="fe-section-title">🎯 What to Do Next — Your Exact Practice Plan</div>
+          <div class="next-steps" id="fe-next-steps"></div>
+        </div>
+
+        <!-- COMPLETE -->
+        <div class="complete-row">
+          <button class="btn-ghost" onclick="tab('pressure',null)">⚡ Pressure Sim</button>
+          <button class="btn-ghost" onclick="tab('script',null)">📜 Script Imprint</button>
+          <button class="btn-green" onclick="completeDay()" style="font-family:var(--fnt-h);font-size:13px;letter-spacing:3px;padding:11px 22px">COMPLETE DAY ✓</button>
+          <button class="btn-ghost" onclick="redoDrillFromFeedback()">↺ Redo with feedback in mind</button>
+        </div>
+
+      </div><!-- /feedback-engine -->
+    </div><!-- /drill-card -->
+  </div><!-- /tab-drill -->
+
+  <!-- PRESSURE -->
+  <div id="tab-pressure" class="tab-panel">
+    <div class="drill-card">
+      <div class="drill-head"><h3>⚡ Pressure Simulation</h3><span>Hold your ground under challenge</span></div>
+      <div class="drill-prompt" id="pressure-prompt"></div>
+      <div class="mic-zone" id="pressure-mic-zone">
+        <div class="mz-title">Record Your Response <span style="color:var(--muted);font-size:8px">Same technique — under pressure</span></div>
+        <div class="mz-main">
+          <button class="big-mic" id="pressure-mic-btn" onclick="toggleMic('pressure')">🎙</button>
+          <div class="mic-info">
+            <div class="mic-state" id="pressure-mic-state">Tap the mic to begin</div>
+            <div class="mic-timer hide" id="pressure-mic-timer">0:00</div>
+          </div>
+        </div>
+        <div class="playback-row" id="pressure-playback">
+          <button class="play-btn" onclick="doPlayback('pressure')" id="pressure-play-btn">▶</button>
+          <div class="pb-info"><div><b id="pressure-pb-dur">—</b> recorded</div><div>Did pressure break your technique?</div></div>
+          <audio id="pressure-audio"></audio>
+        </div>
+        <div class="transcript-area">
+          <div class="ta-label">Transcript / response notes</div>
+          <textarea class="transcript" id="pressure-transcript" placeholder="What did you say under pressure?…"></textarea>
+        </div>
+      </div>
+      <div class="analyse-row">
+        <button class="btn-analyse" onclick="analyseResponse('pressure')">Analyse →</button>
+        <button class="btn-ghost" onclick="resetDrill('pressure')">↺ Redo</button>
+      </div>
+      <div class="feedback-engine" id="pressure-feedback">
+        <div class="fe-score-bar">
+          <div class="fe-overall"><div class="score-num" id="pfe-overall-num">—</div><div class="score-label">Score</div><div class="score-grade" id="pfe-overall-grade">—</div></div>
+          <div class="fe-dims" id="pfe-dims"></div>
+        </div>
+        <div class="fe-section"><div class="fe-section-title">🔍 Filler Word Analysis <span class="count-badge" id="pfe-filler-count">0</span></div><div class="filler-map" id="pfe-filler-map"></div><div id="pfe-filler-advice"></div></div>
+        <div class="fe-section"><div class="fe-section-title">❌ Issues + How to Fix</div><div class="issue-list" id="pfe-issues"></div></div>
+        <div class="fe-section"><div class="fe-section-title">✨ Elite Rewrite</div><div class="rewrite-split"><div class="rw-panel"><div class="rw-label before-lbl">▼ Your Version</div><div class="rw-text" id="pfe-your-text"></div></div><div class="rw-panel"><div class="rw-label after-lbl">▲ Elite Version</div><div class="rw-text after-text" id="pfe-elite-text"></div></div></div></div>
+        <div class="complete-row"><button class="btn-ghost" onclick="tab('script',null)">📜 Script Imprint</button><button class="btn-green" onclick="completeDay()" style="font-family:var(--fnt-h);font-size:13px;letter-spacing:3px;padding:11px 22px">COMPLETE DAY ✓</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <div id="tab-script" class="tab-panel">
+    <div class="script-card">
+      <h3 id="sc-title">—</h3><div class="by" id="sc-by">—</div>
+      <div class="body" id="sc-body"></div>
+      <div class="practice-note">→ Read aloud 3 times. Match pace, weight, pauses exactly.<br>→ Record your 3rd read below and play it back.</div>
+    </div>
+    <div class="mic-zone" style="background:var(--s3);border:1px solid var(--border2);padding:16px 18px;margin-bottom:14px">
+      <div class="mz-title">Record Yourself Reading</div>
+      <div class="mz-main">
+        <button class="big-mic" id="script-mic-btn" onclick="toggleMic('script')">🎙</button>
+        <div class="mic-info"><div class="mic-state" id="script-mic-state">Tap to record</div><div class="mic-timer hide" id="script-mic-timer">0:00</div></div>
+      </div>
+      <div class="playback-row" id="script-playback">
+        <button class="play-btn" onclick="doPlayback('script')" id="script-play-btn">▶</button>
+        <div class="pb-info"><div><b id="script-pb-dur">—</b> recorded</div><div>Compare your pacing to the script</div></div>
+        <audio id="script-audio"></audio>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-green" onclick="completeDay()" style="font-family:var(--fnt-h);font-size:13px;letter-spacing:3px;padding:11px 22px">COMPLETE DAY ✓</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="tab-progress" class="tab-panel">
+    <div class="prog-grid">
+      <div class="pg-card"><div class="big" id="pg-done">0</div><div class="lbl">Days Complete</div></div>
+      <div class="pg-card"><div class="big" id="pg-streak">0</div><div class="lbl">Streak</div></div>
+      <div class="pg-card"><div class="big" id="pg-avg">—</div><div class="lbl">Avg Score</div></div>
+      <div class="pg-card"><div class="big" id="pg-pct">0%</div><div class="lbl">Complete</div></div>
+    </div>
+    <div style="font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Score History</div>
+    <canvas id="score-chart" style="width:100%;height:80px;display:block;background:var(--s2);border:1px solid var(--border);margin-bottom:16px"></canvas>
+    <div style="font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">All 60 Days</div>
+    <div class="heatmap" id="heatmap"></div>
+  </div>
+
+</div><!-- /sc-session -->
+
+<!-- ══ STANDALONE PROGRESS ══ -->
+<div id="sc-progress" class="screen">
+  <div style="font-family:var(--fnt-h);font-size:36px;font-weight:800;margin-bottom:20px;letter-spacing:3px">YOUR <span style="color:var(--gold)">PROGRESS</span></div>
+  <div class="prog-grid">
+    <div class="pg-card"><div class="big" id="sp-done">0</div><div class="lbl">Days Complete</div></div>
+    <div class="pg-card"><div class="big" id="sp-streak">0</div><div class="lbl">Streak</div></div>
+    <div class="pg-card"><div class="big" id="sp-avg">—</div><div class="lbl">Avg Score</div></div>
+    <div class="pg-card"><div class="big" id="sp-pct">0%</div><div class="lbl">Programme</div></div>
+  </div>
+  <div style="font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Score Trend</div>
+  <canvas id="score-chart-2" style="width:100%;height:100px;display:block;background:var(--s2);border:1px solid var(--border);margin-bottom:20px"></canvas>
+  <div style="font-family:var(--fnt-m);font-size:7px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">All 60 Days</div>
+  <div class="heatmap" id="heatmap2"></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// ═══════════════════════════════════════ DATA
+
+const PHASES=[
+  {r:[1,10], name:"Clarity & Control",    sp:"Obama · Peterson · Naval"},
+  {r:[11,20],name:"Structure & Logic",    sp:"Bezos · Musk · Peterson"},
+  {r:[21,30],name:"Authority & Presence", sp:"Churchill · Obama · Modi"},
+  {r:[31,40],name:"Persuasion",           sp:"Voss · Cialdini · Jobs"},
+  {r:[41,50],name:"Conversational",       sp:"Rogan · Fridman · Naval"},
+  {r:[51,60],name:"Command",              sp:"All-speaker synthesis"},
+];
+
+const FILLERS=['um','uh','like','you know','basically','literally','actually','right','so','kind of','sort of','i mean','well','anyway','honestly','frankly','obviously','clearly','essentially','fundamentally'];
+
+// Full 60-day data
+const DAYS=[
+{sp:"Barack Obama",tech:"The Strategic Pause",st:"Obama Pause",topic:"India's startup ecosystem",
+cal:"Sit upright. Breathe in for 4 counts, out for 6. Today you will speak slower than feels comfortable. That discomfort is the technique working.",
+les:`<h3>The Speaker</h3><p>Barack Obama's pauses are not hesitation — they are punctuation. He stops completely before his most important words, creating tension and weight that forces the listener to lean in.</p><h3>The Technique</h3><p>Before any key point, stop for 1–2 full seconds. Let the silence sit. This does three things: it signals that what follows matters, it controls your pace, and it makes the audience wait on your next word.</p><div class="ex">"The question is not whether we can build great companies in India… [2 second pause] …the question is whether we have the patience to."</div><h3>How to Apply Today</h3><ul><li>Identify your 2 strongest points BEFORE you start speaking</li><li>Place a deliberate pause BEFORE each — never after</li><li>Never fill the pause with 'um' or 'so' — silence is the point</li><li>The pause should feel uncomfortably long to you. That means it is the right length.</li></ul><div class="rule">📌 THE RULE: Silence before a key point signals confidence. Noise before it signals fear.</div>`,
+drill:"Speak for 60–90 seconds on: <strong>Why do most Indian startups fail before they find product-market fit?</strong><br><br>Your technique: Identify 2 key points. Pause 2 full seconds BEFORE each. No filler words. No 'um'. Begin with one breath.",
+pressure:"You are mid-point when someone interrupts: <em>'That's too simplistic — startups fail because of funding, not execution.'</em><br><br>Respond calmly. Use the Obama Pause before your counter-point. Do not rush. Do not raise your voice.",
+scTitle:"'A Moment of Stillness'",scBy:"Style: Barack Obama",
+scBody:"There is a moment — <em>in every pitch, every negotiation, every conversation that matters</em> — when the room waits. They wait not for your data. Not for your slides. They wait to see if you believe what you are about to say. That belief… begins with stillness.",
+rule:"Pause before power. The gap is not empty — it is loaded.",
+eliteResponse:"The failure pattern in Indian startups is not primarily about funding. It is about timing. Most founders build solutions before they understand the problem at scale. [pause] The first failure point is premature scaling — they hire, they raise, they expand — before a single customer has proven they cannot live without the product. The second failure point is founders confusing activity with traction. Meetings are not revenue. Press coverage is not product-market fit. [pause] The honest answer is: most startups fail because the founder stopped learning the moment they started pitching.",
+eliteReason:"This response opens with a reframe (not funding — timing), uses the pause technique at the right moments, gives two specific numbered points, avoids filler words entirely, and closes with a memorable final sentence that lands with weight.",
+drillTarget:90},
+
+{sp:"Naval Ravikant",tech:"Minimum Viable Sentence",st:"Naval Brevity",topic:"Wealth and leverage",
+cal:"Your single goal today: say everything in half the words. Before you speak, ask: can I cut this by 30%?",
+les:`<h3>The Technique</h3><p>Naval strips every sentence to its essential idea. No hedging, no filler openers, no redundant qualifiers. He leads with the conclusion — then proves it.</p><div class="ex">❌ "I think that maybe the main issue could be that people don't really understand leverage."<br>✅ "Most people don't understand leverage. That's why they stay poor."</div><h3>Apply It</h3><ul><li>Lead with the conclusion first — not the reasoning</li><li>Remove: basically, literally, kind of, sort of, you know, I think, maybe</li><li>Every sentence must earn its place. If it doesn't add — cut it.</li><li>Short sentences hit harder than long ones in spoken communication</li></ul><div class="rule">📌 THE RULE: Weak speakers explain before concluding. Strong ones conclude, then prove it.</div>`,
+drill:"Speak 60 seconds: <strong>What does financial freedom actually mean for a young professional in India today?</strong><br><br>Lead with your conclusion. Cut all hedging. Every sentence earns its place.",
+pressure:"You say: 'Most salaried Indians will never build wealth from salary alone.' Pushback: <em>'That's elitist — not everyone can invest.'</em><br><br>Respond in exactly 4 sentences. No more. No rambling.",
+scTitle:"'The Leverage Age'",scBy:"Style: Naval Ravikant",
+scBody:"Code runs while you sleep. Content earns while you eat. Capital compounds while you breathe. <em>Leverage is the new labour.</em> The question is not whether you will use it — the question is whether you understand it before someone else does.",
+rule:"Say half as much. Mean twice as much.",
+eliteResponse:"Financial freedom means one thing: your time is no longer contingent on your employer's approval. Not a number. Not a portfolio size. The moment you can say no to a bad opportunity without financial panic — that is freedom. For most Indian professionals, that requires two things: building an asset that earns without your daily presence, and reducing the gap between income and fixed obligations. Salary builds neither. It funds lifestyle. Freedom requires building something that works when you don't.",
+eliteReason:"This response leads with a redefinition (the conclusion), uses short declarative sentences, has zero filler words, and ends with a contrast that lands as a memorable closing line.",
+drillTarget:60},
+
+{sp:"Jordan Peterson",tech:"Precision Word Choice",st:"Peterson Precision",topic:"Discipline and responsibility",
+cal:"Think before you speak today. When you reach a key word — slow down and find the EXACT word, not the first one that comes to mind.",
+les:`<h3>The Technique</h3><p>Peterson chooses words with almost surgical precision. He slows visibly at key adjectives and nouns — searching for the accurate word rather than the comfortable one.</p><div class="ex">❌ "Discipline is… important for success."<br>✅ "Discipline is the infrastructure on which every meaningful achievement is built."</div><h3>Apply It</h3><ul><li>Ban: good, bad, nice, important, stuff, things, basically, really</li><li>Replace vague words with concrete, specific, visual ones</li><li>When you reach a noun — slow down. Is that the right noun?</li><li>The precise word takes slightly longer to find. That pause is acceptable.</li></ul><div class="rule">📌 THE RULE: The person who finds the exact word controls the conversation.</div>`,
+drill:"Speak 60–90 seconds: <strong>Why do most people struggle to maintain consistent habits — and what does that reveal about how they see themselves?</strong><br><br>Focus: choose precise nouns. Avoid 'things', 'stuff', 'kind of'. Think before each key word.",
+pressure:"<em>'You're blaming individuals. Systems cause most failures.'</em><br><br>Respond with precision. Acknowledge the point. Then redirect with exact language. No hedging.",
+scTitle:"'The Weight of the Imprecise'",scBy:"Style: Jordan Peterson",
+scBody:"When you say you 'kind of' believe something — you do not believe it. When you describe a problem as 'basically complex' — you have not understood it. <em>Imprecision is not politeness. It is avoidance.</em> And the things you avoid in language, you avoid in life.",
+rule:"The vague word is a lie you tell yourself. Find the exact one.",
+eliteResponse:"The failure of habits is not primarily a discipline problem — it is an identity problem. People fail to maintain habits because they have not updated their self-concept to include the person who does the habit. You cannot sustain behaviour that contradicts your image of yourself. The second failure is architectural: people design habits that require willpower rather than ones that require almost none. Willpower is a depletable resource. Environment design is not. The person who makes the desired behaviour the path of least resistance will outperform the person who relies on motivation every time.",
+eliteReason:"Notice: no filler words, precise vocabulary throughout (self-concept, architectural, depletable resource, path of least resistance), clear two-part structure, memorable closing contrast.",
+drillTarget:90},
+
+{sp:"Barack Obama",tech:"Anaphora — The Triple Repeat",st:"Obama Anaphora",topic:"Education in India",
+cal:"Voice warm-up: say 'red leather yellow leather' 5 times slowly. Then hum 10 seconds. Today your speech has rhythm.",
+les:`<h3>The Technique</h3><p>Anaphora — repeating an opening phrase 3 times — builds rhythm and creates memorable impact. Obama's most quoted lines all use this structure.</p><div class="ex">"We need schools that inspire. We need teachers who believe. We need a government that invests — not in rhetoric, but in classrooms."</div><h3>Apply It</h3><ul><li>Choose your repeated phrase: 'We need…' 'The question is…' 'India deserves…'</li><li>Build 3 sentences from it, each escalating in power</li><li>Pause fully after the third — let it land</li><li>Do not overuse: one anaphora per response, maximum</li></ul><div class="rule">📌 THE RULE: Repetition in speech is not redundancy — it is rhythm. Rhythm is memory.</div>`,
+drill:"Speak 60–90 seconds: <strong>What would truly transforming India's education system require?</strong><br><br>Include one anaphora structure — 3 sentences starting the same way. Make it feel natural, not forced.",
+pressure:"<em>'Education reform is just talk. Nothing ever changes.'</em><br><br>Use a calm anaphoric structure in your response to hold your ground.",
+scTitle:"'A Generation Waiting'",scBy:"Style: Obama",
+scBody:"There is a child in Bihar who has never seen a library. There is a girl in Rajasthan who can calculate faster than her teacher. <em>There is a country — vast, brilliant, restless</em> — waiting not for permission, but for someone to believe in it first.",
+rule:"Rhythm makes ideas stick. Structure makes speakers credible.",
+eliteResponse:"Transforming Indian education requires three things that are not currently in our national conversation. We need teachers who are paid as professionals, not managed as civil servants. We need infrastructure that treats the village school as seriously as the IIT. We need a curriculum that teaches thinking, not memorisation — because the jobs those children will apply for do not yet exist. [pause] The resources to do this exist. What has been missing is the will to prioritise a child in Chhattisgarh as urgently as we prioritise a quarterly GDP report.",
+eliteReason:"This response uses the anaphora 'We need…' three times with escalating specificity, uses the Obama Pause at the right moment, and closes with a contrast that reframes the problem emotionally.",
+drillTarget:90},
+
+{sp:"Naval Ravikant",tech:"First Principles Reframe",st:"First Principles",topic:"Automation and employment",
+cal:"Before each response: what do I actually believe — not what I've heard others say? Strip received wisdom. Start from zero.",
+les:`<h3>The Technique</h3><p>Naval challenges the frame of every question before answering inside it. He identifies the hidden assumption and names it out loud.</p><div class="ex">Question: "Will AI take Indian jobs?"<br>Reframe: "Before we ask which jobs AI takes — what is a job, really? It's a bundle of tasks. AI takes tasks, not jobs. So the real question: which task bundles are worth rebuilding?"</div><div class="rule">📌 THE RULE: The person who reframes the question controls the answer.</div>`,
+drill:"Speak 60–90 seconds: <strong>Is automation a threat or opportunity for India's workforce?</strong><br><br>First — reframe the question. Identify the hidden assumption. Then build your answer from first principles.",
+pressure:"<em>'You're being naive. Millions will simply lose jobs. That's reality.'</em><br><br>Hold your framework without dismissing the concern. Acknowledge, reframe, redirect.",
+scTitle:"'The Question Behind the Question'",scBy:"Style: Naval Ravikant",
+scBody:"Every panic about technology is a question in disguise. The printing press would destroy scribes. Electricity would end craftsmanship. <em>And yet.</em> The real question has never been what disappears. It has always been what gets built next.",
+rule:"Question the frame before you answer inside it.",
+eliteResponse:"The question assumes automation is a single force with a single effect. That assumption is wrong, and it is causing most of the confusion. Automation eliminates task categories — not human economic contribution. Every prior wave of automation created more economic complexity, not less, which created more roles requiring human judgment. [pause] The real question is not will jobs disappear — they always do. The real question is whether India's education system, infrastructure, and policy environment will move fast enough to position workers in the new categories before they are stranded in the old ones. That is a solvable problem. We are simply not treating it with the urgency it deserves.",
+eliteReason:"Reframes the premise in sentence one, uses first-principles reasoning to dismantle the assumption, pivots to the real question with precision, and ends with a clear judgment rather than hedging.",
+drillTarget:90},
+
+{sp:"Jordan Peterson",tech:"The Responsibility Anchor",st:"Peterson Anchor",topic:"Leadership and accountability",
+cal:"Stand if possible today. Feet shoulder-width, shoulders back, chin level. Posture communicates before you speak.",
+les:`<h3>The Technique</h3><p>When discussion drifts to external causes, Peterson anchors back to what the individual can control — without dismissing context.</p><div class="ex">"Yes, the system has flaws. And you still have to show up tomorrow. What are you willing to do with what you actually have?"</div><div class="rule">📌 THE RULE: Acknowledge the obstacle. Then redirect to agency. That is the only path that changes anything.</div>`,
+drill:"Speak 60–90 seconds: <strong>What separates leaders who build trust from those who destroy it under pressure?</strong><br><br>Use the Responsibility Anchor at least once.",
+pressure:"<em>'Not everyone has the privilege of just taking responsibility. Circumstances matter.'</em><br><br>Acknowledge genuinely — then anchor back to agency without dismissing the point.",
+scTitle:"'Clean Your Room First'",scBy:"Style: Jordan Peterson",
+scBody:"Before you try to fix the world — ask yourself: have you fixed what is within your reach? <em>Not because the world does not need changing. But because the person who cannot order their own affairs cannot order anything else.</em> Start there. Start small. Start honest.",
+rule:"You cannot lead outward what you have not first ordered inward.",
+eliteResponse:"The leaders who build trust do one thing consistently that others don't: they never ask their team to accept an outcome they themselves are unwilling to accept. Trust is built through demonstrated alignment between word and action, repeated over time under pressure. [pause] What destroys trust is not failure — teams forgive failure. What they do not forgive is dishonesty about the failure. The moment a leader rewrites history to protect their ego, the trust account is overdrawn. It rarely recovers. The repair is not an apology. The repair is changed behaviour, sustained long enough to be believed.",
+eliteReason:"Opens with a specific observation rather than a definition, uses the pause technique, names a common misconception ('not failure — dishonesty'), and closes with a concrete prescription.",
+drillTarget:90},
+
+{sp:"Barack Obama",tech:"The Narrative Bridge",st:"Obama Story Bridge",topic:"Healthcare access",
+cal:"Today you tell stories. Before any argument, find a person who embodies the point. Ground every abstraction in a human being.",
+les:`<h3>The Technique</h3><p>Obama leads with people, not policy. One specific individual creates emotional resonance before the intellectual argument arrives.</p><div class="ex">"There's a woman in Lucknow — let's call her Priya — who walks 6 kilometres each way to reach the nearest clinic. She is not a statistic. She is the reason this conversation exists."</div><div class="rule">📌 THE RULE: One specific person is more persuasive than one million statistics. Always lead with the human.</div>`,
+drill:"Speak 90 seconds: <strong>What does unequal healthcare access actually mean for ordinary Indians — and what would fixing it require?</strong><br><br>Begin with one specific person. Build your argument from their story outward.",
+pressure:"<em>'Anecdotes aren't data. You can't make policy from one person's story.'</em><br><br>Defend the narrative bridge — show why the story is the point, not a substitute for the point.",
+scTitle:"'She Is Not a Statistic'",scBy:"Style: Obama",
+scBody:"Her name doesn't appear in the health ministry's report. She is counted — but not seen. She walked two hours to a clinic that had no doctor that day. She walked back. <em>She has done this four times this year.</em>",
+rule:"Name the person before you cite the percentage. Always.",
+eliteResponse:"There is a man in a district in Uttar Pradesh who has not seen a doctor in four years. Not because he does not need one. Because the nearest government facility is two hours away, the doctor is present less than half the days, and the private clinic costs more than he earns in a week. He is not an edge case. He is the median case. [pause] When we talk about healthcare access in India, we are talking about him — repeated across 600 million people. The fix is not conceptually complicated: it requires public investment in primary care facilities in underserved geographies, mandatory rural posting for medical graduates, and drug price regulation. We know what works. We have chosen not to fund it.",
+eliteReason:"Opens with a specific character and situation, makes the bridge explicit ('He is the median case'), uses the pause before pivoting to solutions, and closes with a pointed observation that creates accountability.",
+drillTarget:90},
+
+{sp:"Naval Ravikant",tech:"The Honest Admission",st:"Naval Honesty",topic:"Investing and finance",
+cal:"Admitting what you don't know — calmly and clearly — is more authoritative than pretending certainty. Practice that today.",
+les:`<h3>The Technique</h3><p>Naval says 'I don't know' — and it makes him more credible, not less. Intellectual honesty delivered with composure is a power move.</p><div class="ex">"I don't have precise data on that. What I do know is the underlying principle: most people underestimate the cost of waiting and overestimate the complexity of starting."</div><div class="rule">📌 THE RULE: 'I don't know' said calmly is more authoritative than a confident wrong answer.</div>`,
+drill:"Speak 60–90 seconds: <strong>What should a young Indian professional earning ₹50,000/month actually do with their money?</strong><br><br>At some point, admit something you are uncertain about — and handle it cleanly.",
+pressure:"<em>'You clearly don't know enough about this to be advising people.'</em><br><br>Agree on limits. Hold your ground on what you do know. No defensiveness.",
+scTitle:"'The Honest Edge'",scBy:"Style: Naval Ravikant",
+scBody:"I have been wrong about markets. I have been wrong about people. I have been wrong about myself — which is the hardest kind. <em>And the times I was most dangerous were not when I was wrong — but when I was wrong and certain.</em>",
+rule:"Honest uncertainty earns more trust than confident inaccuracy.",
+eliteResponse:"At ₹50,000 a month, the sequencing matters more than the tactics. Before any investment, build a three-month expense buffer — completely liquid, earning interest, untouchable. That is not optional. Without it, every market volatility moment becomes a forced sell. Second: if your employer offers any provident fund matching, maximise it before anything else. That is a guaranteed 100% return on that portion — nothing in the market reliably beats it. After that — and I will be honest that the right answer depends on your tax situation, your risk tolerance, and your timeline, which I don't know — index funds are the lowest-cost way most people should be in equities.",
+eliteReason:"Has clear structure (sequencing), gives specific actionable steps with reasons, includes a genuine honest admission at the end that sounds confident rather than apologetic, and avoids filler words throughout.",
+drillTarget:90},
+
+{sp:"Jordan Peterson",tech:"The Hierarchy of Points",st:"Peterson Hierarchy",topic:"Social media and attention",
+cal:"Structure before sound. Before any response, silently number your points: 1, 2, 3. Know where you are going before you open your mouth.",
+les:`<h3>The Technique</h3><p>Peterson never wanders. Even in long answers he maintains a clear hierarchy — and he signals that structure out loud so the listener can follow.</p><div class="ex">"There are three things happening here. First — the attention economy is not neutral. Second — the platforms know this. Third — and this is the part nobody talks about — so do we."</div><div class="rule">📌 THE RULE: Tell them how many. Name each one. The listener relaxes when they know where they are in the argument.</div>`,
+drill:"Speak 90 seconds: <strong>What is social media doing to how young Indians think and communicate?</strong><br><br>Open with: 'There are [X] things happening here.' Deliver each with a pause between.",
+pressure:"<em>'Social media has connected millions who were previously isolated.'</em><br><br>Acknowledge — then restructure your argument using the hierarchy.",
+scTitle:"'The Attention Architecture'",scBy:"Style: Jordan Peterson",
+scBody:"There are three things social media does simultaneously. First: it connects. Second: it compares. Third — <em>it rewards the performance of emotion over the experience of it.</em> We have built a machine that monetises the gap between how we feel and how we present ourselves.",
+rule:"Tell them how many. Name each one. The structure IS the argument.",
+eliteResponse:"There are three things social media is doing to young Indian communicators — and they compound each other. First: it is collapsing attention span. The format rewards the fastest possible stimulus, which makes sustained argument feel uncomfortable. Second: it is replacing depth with performance. The incentive is not to think clearly — it is to appear thoughtful. Those are different skills and they train differently. [pause] Third, and this is the one that concerns me most: it is making silence feel like failure. Young communicators are losing their comfort with pauses, with uncertainty, with 'I don't know yet'. Every channel punishes that. And silence — as we have practiced — is where the power lives.",
+eliteReason:"Uses Peterson's exact hierarchy structure with 'First, Second, Third', includes the pause, builds to the most important point last, and ties back to the technique being practiced — making it self-referential and memorable.",
+drillTarget:90},
+
+{sp:"All Phase 1",tech:"Phase 1 Integration",st:"Synthesis",topic:"India's next decade",
+cal:"Full calibration: posture, breath (4 in 6 out), 10-second silence before you begin. Bring all of Phase 1 together.",
+les:`<h3>Phase 1 Integration Day</h3><p>You've worked through: Obama Pause, Naval Brevity, Peterson Precision, Anaphora, First Principles, Responsibility Anchor, Narrative Bridge, Honest Admission, Hierarchy of Points. Today you combine three techniques in a single response.</p><div class="ex">Suggested combination: Narrative Bridge (Obama) → State core point with Naval Brevity → Use Hierarchy of Points (Peterson) → End with an Obama Pause before your final line.</div><div class="rule">📌 THE RULE: Technique practised becomes instinct. Instinct under pressure becomes mastery.</div>`,
+drill:"Speak 90–120 seconds: <strong>What are the 2–3 most important bets India needs to make in the next decade to become a genuinely powerful nation?</strong><br><br>Use at least 3 Phase 1 techniques. Name them before you start.",
+pressure:"<em>'India has been on the verge of greatness for 70 years. Why would the next decade be different?'</em><br><br>Full command response using everything you have.",
+scTitle:"'A Country Still Becoming'",scBy:"Phase 1 Integration",
+scBody:"India is not a destination. It is a direction. <em>And direction — unlike location — requires someone to choose it.</em> There is a generation of Indians building in Pune and Coimbatore and Imphal. They are not in the newspapers yet. But they will be.",
+rule:"Mastery is when you stop thinking about technique and start thinking about truth.",
+eliteResponse:"There is a 24-year-old engineer in Chennai who decided last year not to take the offer from London. She stayed. She is building a supply chain tool for small manufacturers. She is one of about 40,000 like her who made the same decision in the last three years. That cohort — that choice — is the most important bet India has. [pause] There are three structural bets that would compound her work: First — physical infrastructure that connects tier-2 cities to global supply chains. Second — a regulatory environment that allows small businesses to fail fast and restart without being destroyed. Third — an education system that produces builders, not just credential-holders. India does not need to invent new ambition. It needs to stop punishing the ambition it already has.",
+eliteReason:"Opens with the narrative bridge, uses the hierarchy structure with three numbered points, uses the pause technique, leads with a human story rather than statistics, and closes with a memorable reframe.",
+drillTarget:120},
+];
+
+// Fill days 11–60 with proper data
+const DAY_TEMPLATES=[
+  {sp:"Jeff Bezos",tech:"The PREP Framework",st:"Bezos PREP",topic:"Customer trust",rule:"Point. Reason. Example. Point. Four moves. Never skip one.",
+   eliteResponse:"Customer trust is the only durable competitive asset — not technology, not team, not capital. Here is why: technology can be replicated in 18 months. Capital follows performance. Trust, once broken, takes years to rebuild and often cannot be. Amazon kept Prime members through the 2008 recession when competitors lost customers permanently. The lesson is not that trust is nice to have. The lesson is that trust functions as a moat — one that compounds the longer you maintain it and collapses suddenly when you violate it. The companies that survive downturns are the ones whose customers trust them enough to stay even when there are cheaper alternatives.",
+   eliteReason:"Uses PREP exactly: Point (trust is the only durable asset), Reason (why it matters more than other assets), Example (Amazon 2008), Point restated with more force (functions as a compounding moat)."},
+  {sp:"Elon Musk",tech:"Constraint Inversion",st:"Musk Constraint Flip",topic:"EVs in India",rule:"Find the real constraint. The obvious one is usually wrong.",
+   eliteResponse:"Everyone frames the EV challenge in India as an infrastructure problem. That framing is incorrect, and it is causing the wrong investments to be made. The constraint is not charging points. The constraint is the total cost of ownership calculation in the mind of a buyer who earns ₹8 lakhs a year. Once you reframe it that way, the solution is different: it is not about building more chargers — it is about bringing the upfront vehicle cost below ₹8 lakhs. Everything else follows from that. A ₹7 lakh EV with home charging capability changes the adoption curve entirely without a single additional public charging station.",
+   eliteReason:"Identifies the wrong constraint that everyone accepts (infrastructure), names the real one (purchase price psychology), shows how the reframe changes the solution entirely."},
+  {sp:"Jeff Bezos",tech:"Working Backwards",st:"Bezos Working Backwards",topic:"Product thinking",rule:"Decide your conclusion first. Then earn it.",
+   eliteResponse:"Indian companies consistently misread their customers because they start with the product and work forward to the user, instead of starting with the user's problem and working backward to the product. The working backwards approach requires you to write the press release before you write the code. That discipline forces one question: why would someone care? Not why does this technology exist — why would a real person, with real constraints, choose this over what they already do? Most Indian products that fail are technically competent answers to questions no one was asking.",
+   eliteReason:"States the conclusion (misread customers because of wrong direction), explains the working backwards method, applies it specifically to the Indian context, closes with a memorable diagnostic line."},
+  {sp:"Elon Musk",tech:"Bold Claim + Quiet Proof",st:"Musk Bold Claim",topic:"India's tech future",rule:"Make the bold claim with calm eyes. That combination is irresistible.",
+   eliteResponse:"India will produce the world's highest-impact technology companies within 20 years. I say that with more confidence now than I would have three years ago. Here is the evidence: the talent density was already there — IITs have been producing world-class engineers for 50 years. The capital is now arriving — Indian startups raised more venture funding in the last 5 years than in the previous 25 combined. And the problems available to solve — in agriculture, healthcare, financial inclusion, logistics — are enormous, visible, and not yet saturated by incumbents. The only open question is regulatory speed. If India can remove friction from starting and scaling a company to match what Singapore or UAE currently offers, the trajectory is not just good. It is historic.",
+   eliteReason:"Opens with a bold, specific claim, immediately pivots to calm evidence (three specific data points), ends with the one real variable, avoids hedging while acknowledging genuine uncertainty."},
+  {sp:"Jordan Peterson",tech:"The Steelman",st:"Peterson Steelman",topic:"Economic inequality",rule:"Argue the strongest opposing view. Then beat it.",
+   eliteResponse:"The strongest case for significant redistribution of wealth is not that the rich are greedy. That is a weak version of the argument. The strong version is this: compounding inequality creates structural disadvantage that makes the playing field genuinely unequal — not just in outcomes but in opportunity. A child born into poverty faces worse nutrition, worse schooling, worse networks, and worse mental health outcomes. By the time they reach adulthood, the gap is not a result of choices — it is a condition they were born into. That is the real argument, and it deserves a real response. My response is that the solution is not primarily redistributive — it is infrastructural. Investment in public health, education, and basic nutrition addresses root causes rather than symptoms. Redistribution without infrastructure produces dependency. Infrastructure without redistribution produces delay. Both are needed, in that sequence.",
+   eliteReason:"States the steelman explicitly and fairly, engages with the strongest version of the argument rather than a caricature, then responds to that strong version with a nuanced counter."},
+  {sp:"Jeff Bezos",tech:"The Long-Term Frame",st:"Bezos Long Game",topic:"Indian manufacturing",rule:"Argue direction, not position. Direction is where the future lives.",
+   eliteResponse:"India's manufacturing position in 10 years will not be determined by decisions made in Delhi this year. It will be determined by decisions made in 2018 and 2019 that are now compounding — infrastructure investments, PLI schemes, logistics corridor development. That is the nature of industrial policy: the causes and the effects are separated by a decade. The mistake most analysts make is judging the current output of decisions that haven't had time to mature. The more useful question is: which direction are the indicators pointing? And there, the evidence is clear. Export diversification is increasing. New industrial zones are filling faster than projected. The talent pipeline, while still undersized, is growing. The direction is right. The question is whether the speed is sufficient.",
+   eliteReason:"Immediately reframes to the long-term horizon, explains why (causes and effects are separated by a decade), applies the framework to the actual evidence, and closes with a specific direction/speed tension."},
+  {sp:"Elon Musk",tech:"The Problem Ladder",st:"Musk Problem Ladder",topic:"Energy in India",rule:"Define the problem at the right level. Then and only then — solve it.",
+   eliteResponse:"The energy problem in India is usually described as access — not enough electricity reaching enough homes. That is the surface level. The structural level is different: the distribution infrastructure is financially insolvent in most states, which means that even where electricity exists, it is unreliable because the utilities cannot afford maintenance. But the root cause — the level where the real problem actually lives — is the political economy of electricity pricing. Power is priced below cost for agricultural and residential consumers for electoral reasons. That makes the utilities unviable. Which makes investment in infrastructure impossible. Which makes the access problem permanent. You cannot solve energy access without solving energy pricing. You cannot solve energy pricing without political will that does not currently exist at scale. That is the honest picture.",
+   eliteReason:"Uses the problem ladder explicitly: surface (access) → structural (utility insolvency) → root cause (pricing political economy), shows how each level blocks the one above it, ends with a clear honest assessment."},
+  {sp:"Jordan Peterson",tech:"The Accurate Map",st:"Peterson Accuracy",topic:"Mental health and youth",rule:"Accuracy is not pessimism. It is the only foundation on which anything real is built.",
+   eliteResponse:"The mental health challenge among young Indians is real, but the diagnosis is frequently imprecise. Three things are happening that are distinct and require distinct responses. First: there is a genuine increase in clinical anxiety and depression — not just better reporting. The data from tertiary hospitals is showing this. Second: there is also an increase in emotional vocabulary, which makes distress more visible but does not necessarily indicate more distress. Third: the infrastructure to respond is almost entirely absent. India has approximately 0.3 psychiatrists per 100,000 people. The global recommendation is 3. What we are seeing is not just a mental health crisis — it is a mental health crisis intersecting with a near-total absence of response capacity.",
+   eliteReason:"Immediately flags the imprecision in the usual framing, breaks the phenomenon into three distinct things to be accurate, uses actual data (0.3 vs 3 psychiatrists per 100k), and closes with a precise restatement of the combined problem."},
+  {sp:"Jeff Bezos",tech:"The Flywheel",st:"Bezos Flywheel",topic:"Network effects in tech",rule:"Show the mechanism. The outcome follows automatically once you do.",
+   eliteResponse:"Most people describe network effects as a feature — 'the product gets better as more people join.' That is too vague to be useful. The flywheel is the mechanism underneath. For a marketplace like Amazon: more sellers creates more selection. More selection creates better customer experience. Better customer experience attracts more customers. More customers attract more sellers seeking that traffic. Each rotation of the cycle makes the next rotation faster. The key insight is not that this exists — it is that you have to push the flywheel hard at the beginning when it moves slowly and feels pointless. Most companies stop pushing before the momentum builds. The companies that don't are the ones that seem to 'suddenly' dominate their categories after years of uninspiring growth.",
+   eliteReason:"Distinguishes the surface description from the mechanism, explains the specific flywheel steps in order, identifies the counterintuitive implication (push hard when it feels pointless), and closes with a reframe of 'sudden' success."},
+  {sp:"All Phase 2",tech:"Phase 2 Integration",st:"Logic Synthesis",topic:"India's economic trajectory",rule:"The argument that holds under pressure was built before the pressure came.",
+   eliteResponse:"India's economic trajectory over the next decade will be determined by three structural decisions that are currently unresolved. First: whether the regulatory environment evolves fast enough to allow private capital to build in infrastructure, healthcare, and education — or whether those sectors remain protected monopolies that underperform their potential. Second: whether the manufacturing opportunity created by supply chain diversification away from China is captured with policy speed and land reform, or whether it migrates to Vietnam and Indonesia instead. Third: whether urbanisation — which is accelerating regardless of policy — is managed as an opportunity or a crisis. [pause] The optimistic scenario is achievable. It requires none of the conditions that currently seem politically impossible. It requires only sustained execution of decisions that have already been made. That is a different kind of challenge — and in some ways, a harder one.",
+   eliteReason:"Uses the three-point hierarchy, names specific mechanisms rather than abstractions, uses the pause before pivoting to the evaluative conclusion, and closes with a reframe of 'hard' that is original and thought-provoking."},
+];
+
+// Phase 3-6 templates
+const PHASE36_TEMPLATES=[
+  {sp:"Winston Churchill",tech:"The Defiant Opening",st:"Churchill Defiance",topic:"Overcoming adversity"},
+  {sp:"Narendra Modi",tech:"Emotional Anchoring",st:"Modi Emotional Anchor",topic:"National identity"},
+  {sp:"Winston Churchill",tech:"Churchill Cadence",st:"Churchill Cadence",topic:"Climate responsibility"},
+  {sp:"Barack Obama",tech:"The Mirror Technique",st:"Obama Mirror",topic:"Political polarisation"},
+  {sp:"Narendra Modi",tech:"The Aspirational Frame",st:"Modi Aspiration",topic:"Youth and entrepreneurship"},
+  {sp:"Winston Churchill",tech:"Short Words Over Long",st:"Churchill Plain Words",topic:"Democracy and governance"},
+  {sp:"Barack Obama",tech:"The Earned Conclusion",st:"Obama Earned Close",topic:"Justice and equality"},
+  {sp:"Narendra Modi",tech:"The Refrain",st:"Modi Refrain",topic:"India's global standing"},
+  {sp:"Winston Churchill",tech:"The Uncomfortable Truth",st:"Churchill Hard Truth",topic:"Leadership failure"},
+  {sp:"All Phase 3",tech:"Authority Integration",st:"Authority Synthesis",topic:"Leadership"},
+  {sp:"Chris Voss",tech:"Tactical Empathy + Labeling",st:"Voss Labeling",topic:"Salary negotiation"},
+  {sp:"Robert Cialdini",tech:"Social Proof + Authority",st:"Cialdini Social Proof",topic:"Influencing decisions"},
+  {sp:"Steve Jobs",tech:"The Rule of Three",st:"Jobs Rule of Three",topic:"Product communication"},
+  {sp:"Chris Voss",tech:"The Calibrated Question",st:"Voss Calibrated Q",topic:"Difficult conversations"},
+  {sp:"Robert Cialdini",tech:"Reciprocity + Commitment",st:"Cialdini Reciprocity",topic:"Building relationships"},
+  {sp:"Steve Jobs",tech:"The Contrast Principle",st:"Jobs Contrast",topic:"Pitching ideas"},
+  {sp:"Chris Voss",tech:"Mirroring",st:"Voss Mirroring",topic:"Handling objections"},
+  {sp:"Cialdini + Jobs",tech:"Scarcity + Narrative",st:"Scarcity + Story",topic:"Creating urgency"},
+  {sp:"All Phase 4",tech:"Persuasion Integration",st:"Persuasion Synthesis",topic:"Ethical influence"},
+  {sp:"All Phase 4",tech:"Persuasion Mastery",st:"Persuasion Mastery",topic:"Full persuasion"},
+  {sp:"Joe Rogan",tech:"The Genuine Question",st:"Rogan Curiosity",topic:"Understanding difference"},
+  {sp:"Lex Fridman",tech:"The Long Silence",st:"Fridman Silence",topic:"Depth in conversation"},
+  {sp:"Naval Ravikant",tech:"Pivot to Principle",st:"Naval Principle Pivot",topic:"Meaning and work"},
+  {sp:"Joe Rogan",tech:"The Vulnerable Admission",st:"Rogan Vulnerability",topic:"Fear and growth"},
+  {sp:"Lex Fridman",tech:"Deep Reflection Questions",st:"Fridman Depth",topic:"Meaning and consciousness"},
+  {sp:"Naval Ravikant",tech:"The Reframe as Gift",st:"Naval Reframe",topic:"Success redefined"},
+  {sp:"Joe Rogan",tech:"The Unexpected Concession",st:"Rogan Concession",topic:"Arguing well"},
+  {sp:"Lex Fridman",tech:"The Compassionate Challenge",st:"Fridman Challenge",topic:"Disagreement and respect"},
+  {sp:"All Phase 5",tech:"Conversational Mastery",st:"Conversation Synthesis",topic:"The real conversation"},
+  {sp:"All Phase 5",tech:"Conversation Integration",st:"Conversation Integration",topic:"Deep dialogue"},
+  {sp:"Full Synthesis",tech:"Opening with Command",st:"Command Opening",topic:"High-stakes presentations"},
+  {sp:"Full Synthesis",tech:"Hostile Room Control",st:"Hostile Room",topic:"Leadership under scrutiny"},
+  {sp:"Full Synthesis",tech:"The 60-Second Pitch",st:"Power Pitch",topic:"Ideas under time pressure"},
+  {sp:"Full Synthesis",tech:"The Hard Conversation",st:"Hard Conversation",topic:"Difficult feedback"},
+  {sp:"Full Synthesis",tech:"The Long Game",st:"Long Game",topic:"Trust over time"},
+  {sp:"Full Synthesis",tech:"Reading the Room",st:"Room Reading",topic:"Adaptive communication"},
+  {sp:"Full Synthesis",tech:"High-Stakes Silence",st:"Strategic Silence",topic:"Negotiation"},
+  {sp:"Full Synthesis",tech:"The Leadership Monologue",st:"Leadership Voice",topic:"Inspiring action"},
+  {sp:"Full Synthesis",tech:"Your Personal Code",st:"Full Integration",topic:"Communication identity"},
+  {sp:"Full Synthesis",tech:"Day 60 — Command",st:"Day 60",topic:"Everything"},
+];
+
+// Build full DAYS array
+const fullDayTemplates=[...DAY_TEMPLATES,...PHASE36_TEMPLATES];
+fullDayTemplates.forEach((t,i)=>{
+  const day=i+11;
+  DAYS.push({
+    sp:t.sp,tech:t.tech,st:t.st||t.tech,topic:t.topic,
+    cal:`Today's session: ${t.tech}. Breathe, centre, and focus on applying this technique consciously. Every technique requires deliberate application before it becomes natural.`,
+    les:`<h3>${t.tech}</h3><p>Day ${day} technique from the ${t.sp} model. This session builds on everything you've practised so far.</p><div class="rule">📌 THE RULE: ${t.rule||'Technique practised becomes instinct. Instinct under pressure becomes mastery.'}</div>`,
+    drill:`Speak 60–90 seconds applying <strong>${t.tech}</strong> to this topic: <strong>${t.topic}</strong>.<br><br>Apply the technique consciously. Record yourself. Listen back. Then submit your transcript for feedback.`,
+    pressure:`Someone challenges your position on <strong>${t.topic}</strong>. Respond using <strong>${t.tech}</strong> under pressure. Hold your ground. Do not rush. Do not abandon the technique.`,
+    scTitle:`'${t.tech}'`,scBy:`Style: ${t.sp}`,
+    scBody:`The mark of a technique mastered is that you no longer think about it. You simply speak — and it is there, underneath, holding the structure up. <em>That is the goal of Day ${day}.</em>`,
+    rule:t.rule||'Technique practised becomes instinct. Instinct under pressure becomes mastery.',
+    eliteResponse:t.eliteResponse||`An elite response to "${t.topic}" using ${t.tech} would: open with a clear, specific claim rather than a hedge; apply the ${t.st} technique explicitly so the listener can feel it; use zero filler words; and close with a sentence that is more memorable than anything that came before it. Record yourself, listen back, and identify the exact moment your technique either held or broke.`,
+    eliteReason:t.eliteReason||`The elite version uses ${t.tech} to create structure that the listener can follow without effort. It demonstrates the technique visibly enough to be studied.`,
+    drillTarget:90
+  });
+});
+
+// ═══════════════════════ STATE
+let S={day:1,streak:0,done:[],scores:[],recording:{},mediaRec:{},chunks:{},blobs:{},speechRec:{},speechText:{},recDur:{},recStart:{},recInterval:{}};
+
+function save(){try{localStorage.setItem('voxx_v4',JSON.stringify({day:S.day,streak:S.streak,done:S.done,scores:S.scores}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('voxx_v4')||'{}');if(d.day)S.day=d.day;if(d.streak)S.streak=d.streak;if(d.done)S.done=d.done;if(d.scores)S.scores=d.scores}catch(e){}}
+
+window.addEventListener('load',()=>{
+  load();buildSidebar();updateHeader();
+  if(S.day>1||S.done.length>0){
+    document.getElementById('sc-welcome').classList.remove('active');
+    document.getElementById('sc-session').classList.add('active');
+    loadDay(S.day);
+  }
+});
+
+function beginProgram(){
+  S.day=1;S.streak=0;S.done=[];S.scores=[];save();
+  document.getElementById('sc-welcome').classList.remove('active');
+  document.getElementById('sc-session').classList.add('active');
+  buildSidebar();loadDay(1);
+}
+
+// ─── SIDEBAR ─────────────────────────────────────────
+function buildSidebar(){
+  const c=document.getElementById('sb-days');c.innerHTML='';
+  for(let i=1;i<=60;i++){
+    const btn=document.createElement('button');
+    btn.className='dg-btn'+(i===S.day?' active':S.done.includes(i)?' done':'');
+    btn.textContent=i;btn.title=`Day ${i}`;btn.onclick=()=>jumpDay(i);c.appendChild(btn);
+  }
+}
+function updateHeader(){
+  document.getElementById('hd-day').textContent=S.day||'—';
+  document.getElementById('hd-streak').textContent=S.streak;
+  const lastScore=S.scores.length?S.scores[S.scores.length-1]:'—';
+  document.getElementById('hd-score').textContent=lastScore;
+}
+function showMain(name){
+  ['session','progress'].forEach(s=>{
+    const el=document.getElementById('sc-'+s);
+    if(el)el.classList.toggle('active',s===name);
+  });
+  document.querySelectorAll('.sb-link').forEach(l=>{
+    l.classList.toggle('active',l.onclick&&l.onclick.toString().includes("'"+name+"'"));
+  });
+  if(name==='progress')updateProgressScreen();
+}
+
+// ─── LOAD DAY ─────────────────────────────────────────
+function loadDay(day){
+  S.day=day;updateHeader();buildSidebar();save();
+  const d=DAYS[day-1];if(!d)return;
+  const ph=PHASES.find(p=>day>=p.r[0]&&day<=p.r[1])||PHASES[0];
+  const phi=PHASES.indexOf(ph);
+  document.getElementById('prog-fill').style.width=`${(day/60)*100}%`;
+  document.getElementById('ps-phase').textContent=ph.name;
+  document.getElementById('ps-speaker').textContent=d.sp;
+  document.getElementById('ps-tech').textContent=d.tech;
+  document.getElementById('ps-topic').textContent=d.topic;
+  document.getElementById('tag-day').textContent=`Day ${day}`;
+  document.getElementById('tag-phase').textContent=`Phase ${phi+1} — ${ph.name}`;
+  document.getElementById('tag-tech').textContent=d.st;
+  document.getElementById('s-title').textContent=`${d.sp} · ${d.tech}`;
+  document.getElementById('les-cal').innerHTML=`<h3>Presence Calibration</h3><p>${d.cal}</p>`;
+  document.getElementById('les-tech').innerHTML=d.les;
+  document.getElementById('drill-prompt').innerHTML=d.drill;
+  if(d.drillTarget)document.getElementById('drill-target').textContent=`Target: ${d.drillTarget}s`;
+  document.getElementById('pressure-prompt').innerHTML=d.pressure;
+  document.getElementById('sc-title').textContent=d.scTitle;
+  document.getElementById('sc-by').textContent=d.scBy;
+  document.getElementById('sc-body').innerHTML=d.scBody;
+  resetAll();tab('lesson',document.querySelector('.tab-btn'));
+}
+
+function resetAll(){
+  ['drill','pressure'].forEach(id=>{
+    const ta=document.getElementById(id+'-transcript');if(ta)ta.value='';
+    const fb=document.getElementById(id+'-feedback');if(fb)fb.classList.remove('show');
+    const pb=document.getElementById(id+'-playback');if(pb)pb.classList.remove('show');
+    resetMicUI(id);
+  });
+  document.querySelectorAll('.cl-item input').forEach(i=>i.checked=false);
+  document.querySelectorAll('.cl-item').forEach(i=>i.classList.remove('checked'));
+}
+
+function resetDrill(id){
+  const ta=document.getElementById(id+'-transcript');if(ta)ta.value='';
+  const fb=document.getElementById(id+'-feedback');if(fb)fb.classList.remove('show');
+  const pb=document.getElementById(id+'-playback');if(pb)pb.classList.remove('show');
+  resetMicUI(id);
+}
+
+function jumpDay(day){if(day===S.day)return;S.day=day;save();loadDay(day);showMain('session');}
+
+// ─── TABS ──────────────────────────────────────────────
+function tab(name,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  const names=['lesson','drill','pressure','script','progress'];
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.tab-btn').forEach((b,i)=>{if(names[i]===name)b.classList.add('active');});
+  const panel=document.getElementById('tab-'+name);
+  if(panel)panel.classList.add('active');
+  if(name==='progress')updateProgressTab();
+}
+
+// ═══════════════════════════════════════
+// MICROPHONE — MediaRecorder API
+// ═══════════════════════════════════════
+async function toggleMic(id){
+  if(S.recording[id]){stopMic(id);}else{await startMic(id);}
+}
+
+async function startMic(id){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+    S.chunks[id]=[];
+    const opts=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?{mimeType:'audio/webm;codecs=opus'}:
+                MediaRecorder.isTypeSupported('audio/webm')?{mimeType:'audio/webm'}:{};
+    const mr=new MediaRecorder(stream,opts);
+    S.mediaRec[id]=mr;
+    mr.ondataavailable=e=>{if(e.data&&e.data.size>0)S.chunks[id].push(e.data);};
+    mr.onstop=()=>{
+      const blob=new Blob(S.chunks[id],{type:mr.mimeType||'audio/webm'});
+      S.blobs[id]=blob;
+      const url=URL.createObjectURL(blob);
+      const audio=document.getElementById(id+'-audio');if(audio)audio.src=url;
+      const dur=S.recDur[id]||0;
+      const pb=document.getElementById(id+'-playback');if(pb)pb.classList.add('show');
+      const pbDur=document.getElementById(id+'-pb-dur');if(pbDur)pbDur.textContent=fmtTime(dur);
+      stream.getTracks().forEach(t=>t.stop());
+      stopWave(id);
+    };
+    mr.start(100);S.recording[id]=true;
+    S.recStart[id]=Date.now();S.recDur[id]=0;
+    // UI
+    const btn=document.getElementById(id+'-mic-btn');if(btn){btn.classList.add('rec');btn.textContent='⏹';}
+    const st=document.getElementById(id+'-mic-state');if(st){st.textContent='● Recording… tap ⏹ to stop';st.className='mic-state live';}
+    const tmr=document.getElementById(id+'-mic-timer');if(tmr)tmr.classList.remove('hide');
+    const badge=document.getElementById(id+'-live-badge');if(badge)badge.style.display='inline';
+    S.recInterval[id]=setInterval(()=>{
+      S.recDur[id]=Math.round((Date.now()-S.recStart[id])/1000);
+      const tv=document.getElementById(id+'-mic-timer');if(tv)tv.textContent=fmtTime(S.recDur[id]);
+    },500);
+    startWave(id,stream);
+    startSpeechRec(id);
+  }catch(e){
+    let msg='Microphone error: ';
+    if(e.name==='NotAllowedError')msg='Permission denied. Click the 🔒 in your browser address bar → Allow microphone.';
+    else if(e.name==='NotFoundError')msg='No microphone found. Connect a mic and try again.';
+    else msg+=e.message+'. Use Chrome or Edge.';
+    const st=document.getElementById(id+'-mic-state');if(st){st.textContent='⚠ '+msg;st.className='mic-state';}
+  }
+}
+
+function stopMic(id){
+  S.recording[id]=false;
+  clearInterval(S.recInterval[id]);
+  if(S.mediaRec[id]&&S.mediaRec[id].state!=='inactive')try{S.mediaRec[id].stop();}catch(e){}
+  if(S.speechRec[id])try{S.speechRec[id].stop();}catch(e){}
+  resetMicUI(id);
+  const dur=S.recDur[id]||0;
+  const st=document.getElementById(id+'-mic-state');
+  if(st){st.textContent=`✓ ${dur}s recorded — play it back, then submit`;st.className='mic-state done';}
+  const badge=document.getElementById(id+'-live-badge');if(badge)badge.style.display='none';
+}
+
+function resetMicUI(id){
+  const btn=document.getElementById(id+'-mic-btn');if(btn){btn.classList.remove('rec');btn.textContent='🎙';}
+  const tmr=document.getElementById(id+'-mic-timer');if(tmr){tmr.classList.add('hide');tmr.textContent='0:00';}
+}
+
+// ─── LIVE TRANSCRIPT (Web Speech API) ─────────────────
+function startSpeechRec(id){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  S.speechText[id]='';
+  const r=new SR();r.continuous=true;r.interimResults=true;r.lang='en-IN';
+  r.onresult=e=>{
+    let final='',interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal){final+=t+' ';S.speechText[id]=(S.speechText[id]||'')+final;}
+      else interim+=t;
+    }
+    const ta=document.getElementById(id+'-transcript');
+    if(ta&&(S.speechText[id]||interim)){ta.value=(S.speechText[id]||'')+interim;}
+  };
+  r.onend=()=>{if(S.recording[id])try{r.start();}catch(e){}};
+  r.onerror=()=>{};
+  try{r.start();S.speechRec[id]=r;}catch(e){}
+}
+
+// ─── WAVEFORM ──────────────────────────────────────────
+function startWave(id,stream){
+  const canvas=document.getElementById(id+'-wave');const wrap=document.getElementById(id+'-wave-wrap');
+  if(!canvas||!wrap)return;wrap.classList.add('show');
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const src=ctx.createMediaStreamSource(stream);
+    const analyser=ctx.createAnalyser();analyser.fftSize=256;src.connect(analyser);
+    S._audioCtx=ctx;S._analyser=analyser;
+    const draw=()=>{
+      if(!S.recording[id]){return;}
+      requestAnimationFrame(draw);
+      const buf=new Uint8Array(analyser.frequencyBinCount);analyser.getByteTimeDomainData(buf);
+      const c2=canvas.getContext('2d');const W=canvas.offsetWidth||400,H=40;canvas.width=W;
+      c2.fillStyle='#0f1114';c2.fillRect(0,0,W,H);
+      c2.strokeStyle='#c8a84b';c2.lineWidth=1.5;c2.beginPath();
+      buf.forEach((v,i)=>{const y=(v/128)*(H/2);i===0?c2.moveTo(0,y):c2.lineTo(i*(W/buf.length),y);});
+      c2.stroke();
+    };draw();
+  }catch(e){}
+}
+function stopWave(id){const w=document.getElementById(id+'-wave-wrap');if(w)w.classList.remove('show');}
+
+// ─── PLAYBACK ──────────────────────────────────────────
+function doPlayback(id){
+  const audio=document.getElementById(id+'-audio');const btn=document.getElementById(id+'-play-btn');
+  if(!audio||!audio.src)return;
+  if(audio.paused){audio.play();if(btn)btn.textContent='⏸';}
+  else{audio.pause();audio.currentTime=0;if(btn)btn.textContent='▶';}
+  audio.onended=()=>{if(btn)btn.textContent='▶';};
+}
+
+function fmtTime(s){const m=Math.floor(s/60);return`${m}:${(s%60).toString().padStart(2,'0')}`;}
+function chk(input){input.closest('.cl-item').classList.toggle('checked',input.checked);}
+
+// ═══════════════════════════════════════
+// DEEP FEEDBACK ENGINE
+// ═══════════════════════════════════════
+function detectFillers(text){
+  if(!text)return{map:{},total:0,list:[]};
+  const lower=text.toLowerCase();const map={};
+  FILLERS.forEach(f=>{
+    const re=new RegExp('\\b'+f.replace(/ /g,'\\s+')+'\\b','gi');
+    const m=lower.match(re);if(m&&m.length>0){map[f]=(map[f]||0)+m.length;}
+  });
+  const total=Object.values(map).reduce((a,b)=>a+b,0);
+  const list=Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  return{map,total,list};
+}
+
+function analyseText(text,dur,checks,dayData){
+  const words=text?text.split(/\s+/).filter(Boolean).length:0;
+  const sentences=text?text.split(/[.!?]+/).filter(s=>s.trim().length>5).length:0;
+  const fillerData=detectFillers(text);
+  const wpm=dur>0?Math.round(words/(dur/60)):0;
+  const avgSentLen=sentences>0?Math.round(words/sentences):0;
+  const hasOpening=text?/^[A-Z]/.test(text.trim()):false;
+  const endsStrong=text?/[.!]$/.test(text.trim()):false;
+  const hasNumbers=/\d/.test(text||'');
+  const hasContrast=/(but|however|yet|although|despite|instead|rather|while)/i.test(text||'');
+  const hasSpecifics=/(example|specifically|for instance|in particular|namely|such as)/i.test(text||'');
+
+  // Score each dimension (0-10)
+  const dims={};
+
+  // 1. Filler Control (0-10)
+  const fillerRate=words>0?(fillerData.total/words)*100:0;
+  dims.filler=fillerData.total===0?10:fillerData.total<=1?8:fillerData.total<=3?5:fillerData.total<=6?3:1;
+
+  // 2. Pace (0-10)
+  if(wpm===0&&dur>0)dims.pace=3; // spoke but no transcript
+  else if(wpm===0)dims.pace=0;
+  else if(wpm>=110&&wpm<=150)dims.pace=10;
+  else if(wpm>=90&&wpm<=170)dims.pace=7;
+  else if(wpm>170)dims.pace=4;
+  else dims.pace=5;
+
+  // 3. Structure (0-10)
+  const structScore=(hasOpening?2:0)+(endsStrong?3:0)+(sentences>=3?3:sentences>=2?1:0)+(hasContrast?2:0);
+  dims.structure=Math.min(10,structScore);
+
+  // 4. Technique Application (0-10)
+  dims.technique=Math.min(10,checks*1.8);
+
+  // 5. Specificity (0-10)
+  dims.specificity=(hasNumbers?3:0)+(hasSpecifics?3:0)+(words>=60?2:words>=30?1:0)+(hasContrast?2:0);
+  dims.specificity=Math.min(10,dims.specificity);
+
+  // 6. Brevity (0-10)
+  const targetWpm=dayData.drillTarget||90;
+  const overrun=dur>targetWpm*1.5;
+  const underrun=dur>0&&dur<targetWpm*0.4;
+  dims.brevity=overrun?4:underrun&&dur>0?5:words>0?(avgSentLen<=20?10:avgSentLen<=28?7:4):3;
+
+  // 7. Confidence markers (0-10)
+  const hedges=(text||'').match(/\b(maybe|perhaps|possibly|I think|I guess|kind of|sort of|I'm not sure|probably|might be)\b/gi)||[];
+  dims.confidence=Math.max(0,10-hedges.length*2);
+
+  // 8. Clarity (0-10)
+  dims.clarity=words===0?0:words<15?3:sentences>0&&avgSentLen<30?8:5;
+
+  const overall=Math.round(Object.values(dims).reduce((a,b)=>a+b,0)/8*10);
+  return{dims,overall,words,sentences,wpm,dur,fillerData,fillerRate,avgSentLen,hasOpening,endsStrong,hasNumbers,hasContrast,hasSpecifics,hedges:hedges.length};
+}
+
+function generateIssues(analysis,dayData,isDrillTab){
+  const issues=[];
+  const{dims,words,wpm,dur,fillerData,fillerRate,avgSentLen,hasOpening,endsStrong,hedges}=analysis;
+
+  // CRITICAL: Filler words
+  if(fillerData.total>0){
+    const topFillers=fillerData.list.slice(0,3).map(([f,c])=>`"${f}" ×${c}`).join(', ');
+    issues.push({
+      sev:'critical',icon:fillerData.total>5?'🔴':'🟡',
+      title:`${fillerData.total} filler word${fillerData.total>1?'s':''} detected`,
+      what:`You used: ${topFillers}. Fillers signal hesitation and erode your authority with every occurrence. At ${Math.round(fillerRate)}% filler density, listeners register you as uncertain even if your content is strong.`,
+      how:`The fix is not willpower — it is replacement. Every filler is a pause you refused to take. Replace each 'um' with a 1-second silence. Replace 'like' with nothing. Your mouth will feel uncomfortable. That discomfort means you are correcting the habit.`,
+      example:fillerData.list[0]?`Instead of: "...um, the key point is like..." → Say: "...[ pause ] The key point is..."`:''
+    });
+  }
+
+  // CRITICAL: Too short
+  if(words<20&&dur<10){
+    issues.push({sev:'critical',icon:'🔴',
+      title:'Response too short to analyse properly',
+      what:'Less than 20 words gives the feedback engine insufficient material. This is either a technical issue with the transcript or the response was not delivered.',
+      how:'Record your response using the microphone, or type your spoken content in the transcript box. The analysis engine needs your actual words to give you useful feedback.',
+      example:''});
+  }
+
+  // Pace
+  if(wpm>175){
+    issues.push({sev:'high',icon:'🟠',
+      title:`Speaking too fast — ${wpm} words per minute`,
+      what:`Elite spoken communication sits between 110–150 WPM. At ${wpm} WPM you are forcing your listener to process faster than is comfortable. Key words blur together. Pauses disappear. Authority evaporates.`,
+      how:`Deliberately slow every sentence by 30%. Find your two key points in any response and pause 2 full seconds before each. The pause will feel uncomfortably long. That means it is exactly right.`,
+      example:'"The problem with startups is—" → Stop. Breathe. "...The problem with startups is execution, not funding."'});
+  }else if(wpm>0&&wpm<70){
+    issues.push({sev:'medium',icon:'🟡',
+      title:`Speaking too slowly — ${wpm} WPM`,
+      what:`Below 70 WPM begins to feel laboured and loses conversational energy. The listener starts to disengage.`,
+      how:`Aim for 110–150 WPM as your baseline pace. Slow down for emphasis — not as your default.`,
+      example:''});
+  }
+
+  // Structure
+  if(!hasOpening){
+    issues.push({sev:'high',icon:'🟠',
+      title:'No clear opening sentence',
+      what:'Your response does not begin with a strong, complete sentence. Listeners form their entire assessment of your authority in the first 10 seconds. Starting with a filler, a hedge, or mid-thought signals low confidence.',
+      how:`Begin every response with a declarative sentence that states your position. Never start with "Um", "So", "I think", or "Well". Start with the conclusion.`,
+      example:'"I think the main issue might be..." → "The main issue is execution, not funding."'});
+  }
+
+  if(!endsStrong){
+    issues.push({sev:'medium',icon:'🟡',
+      title:'Weak or absent closing sentence',
+      what:'Your response trails off rather than ending on a decisive note. A weak close undermines everything that came before it — the last thing said is the thing remembered.',
+      how:`Plan your closing sentence before you start speaking. It should be your most memorable line — a restatement of your position, a contrast, or a question that redirects the conversation.`,
+      example:'"...so yeah, that\'s basically my view." → "That is not a resource problem. It is a prioritisation problem."'});
+  }
+
+  if(avgSentLen>30){
+    issues.push({sev:'medium',icon:'🟡',
+      title:`Sentences too long — average ${avgSentLen} words`,
+      what:'Long sentences in spoken communication force the listener to hold more information than working memory comfortably handles. By the time you reach the end of a 35-word sentence, they have lost the beginning.',
+      how:`Break every sentence over 25 words into two. In speech, short sentences create emphasis. Short sentences create pace. Short sentences land harder than long, winding ones that eventually make their point somewhere near the end.`,
+      example:''});
+  }
+
+  // Hedging
+  if(hedges>2){
+    issues.push({sev:'medium',icon:'🟡',
+      title:`${hedges} hedge phrases detected`,
+      what:`Phrases like "I think", "maybe", "probably", "I'm not sure" communicate uncertainty to your listener — even when you are certain. Every hedge is an invitation to challenge your position.`,
+      how:`Remove hedges from your spoken vocabulary. If you genuinely don't know something, say "I don't have data on that specific point" — which is honest without being uncertain. Reserve hedges for genuine uncertainty only.`,
+      example:'"I think this might be a problem" → "This is a problem" (if you believe it) or "I don\'t have data on this" (if you genuinely don\'t know)'});
+  }
+
+  // Specificity
+  if(!analysis.hasNumbers&&!analysis.hasSpecifics&&words>30){
+    issues.push({sev:'low',icon:'🔵',
+      title:'Response lacks specific evidence',
+      what:'Your response makes claims without anchoring them in specific examples, numbers, or named cases. Abstract claims are easy to dismiss. Specific evidence is much harder to argue with.',
+      how:`For every claim you make, ask: "What specific evidence do I have?" Add one concrete example, one number, or one named case study to your next rep of this drill.`,
+      example:'"Startups fail because of bad execution" → "Startups fail because founders scale before finding product-market fit — Zomato nearly shut down in 2015 for exactly this reason."'});
+  }
+
+  // Positive items if performing well
+  if(dims.filler>=8&&words>30)issues.push({sev:'pass',icon:'✅',title:'Excellent filler word control',what:'Zero or near-zero fillers in this response. That is a significant achievement. The discipline of replacing fillers with silence is one of the hardest habits to build.',how:'Maintain this standard under pressure — that is the next test. Take the pressure simulation.',example:''});
+  if(dims.pace>=8&&wpm>0)issues.push({sev:'pass',icon:'✅',title:`Excellent pace — ${wpm} WPM`,what:'Your speaking pace is in the elite range. Listeners can absorb what you are saying without strain, which means your content lands with full impact.',how:'Maintain this pace under interruption — that is when most people speed up and lose authority.',example:''});
+
+  return issues;
+}
+
+function generateEliteRewrite(userText,dayData){
+  // Return the pre-written elite response for this day
+  return dayData.eliteResponse||`[Elite response for this technique would open with a clear, declarative statement — no hedge, no filler. It would apply the ${dayData.tech} technique explicitly. It would use specific evidence rather than abstractions. And it would close with a memorable final sentence rather than trailing off.]`;
+}
+
+function generateNextSteps(analysis,fillerData,dayData){
+  const steps=[];
+  const{dims,wpm,dur}=analysis;
+
+  // Priority 1: Worst dimension
+  const sortedDims=Object.entries(dims).sort((a,b)=>a[1]-b[1]);
+  const [worstDim,worstScore]=sortedDims[0];
+  const dimNames={filler:'Filler Control',pace:'Pace & Speed',structure:'Structure',technique:'Technique Application',specificity:'Specificity',brevity:'Brevity',confidence:'Confidence',clarity:'Clarity'};
+  const dimAdvice={
+    filler:`Record yourself again immediately. This time, every time you feel an 'um' coming — stop completely. Hold the silence for 2 seconds. Then continue. Do this until you complete the entire drill with zero fillers.`,
+    pace:`Set a slow, deliberate pace before your next rep. Breathe between sentences. Aim for 110–130 WPM. The pause between your sentences is not dead air — it is authority.`,
+    structure:`Before your next rep: write your opening sentence and closing sentence on paper. Start with the opening. Everything in between supports it. End with the closing. Nothing after.`,
+    technique:`Before your next rep: say the technique name out loud. Say what it requires. Then apply it. It should feel forced and deliberate. That is correct. Naturalness comes later.`,
+    specificity:`Before your next rep: identify one specific number, one named example, and one concrete detail you will include. Do not speak until you have all three ready.`,
+    brevity:`Set a target: say everything you need to say in half the time. If your last response was 90 seconds, do it in 45. You will be forced to cut everything that isn't essential.`,
+    confidence:`Remove every hedge from your next rep. 'I think' → removed. 'Maybe' → removed. 'Probably' → removed. State everything as a position, not a guess. Where you genuinely don't know: say 'I don't know that specifically.'`,
+    clarity:`Break every long sentence into two. Speak in shorter bursts. Shorter sentences = clearer thinking = more authority.`,
+  };
+
+  steps.push({
+    title:`Fix Your #1 Issue: ${dimNames[worstDim]} (${worstScore}/10)`,
+    desc:`This is your weakest dimension in this session.`,
+    drill:dimAdvice[worstDim]||'Record yourself again and focus specifically on this dimension.'
+  });
+
+  // Priority 2: Technique specific
+  steps.push({
+    title:`Technique Mastery: ${dayData.tech}`,
+    desc:`Study the Elite Rewrite above until you understand exactly why each sentence is structured the way it is. Then do one more rep applying what you observed.`,
+    drill:`Before your next rep: read the elite version aloud twice. Then deliver your own version. The goal is not to copy — it is to understand the structure well enough to build your own version of it.`
+  });
+
+  // Priority 3: Next session prep
+  if(dims.filler>=8&&dims.pace>=7&&dims.structure>=6){
+    steps.push({
+      title:'Ready for the Pressure Simulation',
+      desc:'Your scores in this drill are strong enough to test under pressure.',
+      drill:'Go to the ⚡ Pressure tab. The technique must hold when you are challenged. That is the real test of mastery.'
+    });
+  }else{
+    steps.push({
+      title:'Redo Before Moving to Pressure',
+      desc:'Your scores suggest at least one more rep of this drill before the pressure simulation will be productive.',
+      drill:`Record one more rep. Apply the fixes from Issue #1 above. Submit it again. Compare your score.`
+    });
+  }
+
+  return steps;
+}
+
+// ─── MAIN ANALYSIS FUNCTION ────────────────────────────
+function analyseResponse(id){
+  const text=document.getElementById(id+'-transcript').value.trim();
+  const dur=S.recDur[id]||0;
+  const checks=document.querySelectorAll(`#tab-${id==='drill'?'drill':'pressure'} .cl-item input:checked`).length;
+  const dayData=DAYS[S.day-1];
+  const hasRec=!!S.blobs[id];
+
+  if(!text&&!hasRec){alert('Record your response first (or type what you said in the transcript box), then tap Analyse.');return;}
+
+  const analysis=analyseText(text,dur,checks,dayData);
+  const issues=generateIssues(analysis,dayData,id==='drill');
+  const eliteText=generateEliteRewrite(text,dayData);
+  const nextSteps=generateNextSteps(analysis,analysis.fillerData,dayData);
+
+  // Save score
+  S.scores.push(analysis.overall);save();
+  document.getElementById('hd-score').textContent=analysis.overall;
+
+  // ── Render: Score header ──
+  const prefix=id==='drill'?'fe':'pfe';
+  const scoreEl=document.getElementById(`${prefix}-overall-num`);
+  const gradeEl=document.getElementById(`${prefix}-overall-grade`);
+  if(scoreEl){
+    const c=analysis.overall>=80?'var(--green)':analysis.overall>=60?'var(--gold)':analysis.overall>=40?'var(--orange)':'var(--red)';
+    scoreEl.textContent=analysis.overall;scoreEl.style.color=c;
+    const grade=analysis.overall>=90?'S — ELITE':analysis.overall>=80?'A — STRONG':analysis.overall>=65?'B — GOOD':analysis.overall>=50?'C — DEVELOPING':'D — NEEDS WORK';
+    if(gradeEl){gradeEl.textContent=grade;gradeEl.style.color=c;}
+  }
+
+  // ── Render: Dimension bars ──
+  const dimsEl=document.getElementById(`${prefix}-dims`);
+  if(dimsEl){
+    const dimLabels={filler:'Filler Control',pace:'Pace',structure:'Structure',technique:'Technique',specificity:'Specificity',brevity:'Brevity',confidence:'Confidence',clarity:'Clarity'};
+    dimsEl.innerHTML=Object.entries(analysis.dims).map(([k,v])=>{
+      const pct=v*10;const c=pct>=80?'var(--green)':pct>=60?'var(--gold)':pct>=40?'var(--orange)':'var(--red)';
+      return `<div class="fe-dim">
+        <div class="fe-dim-name">${dimLabels[k]||k}</div>
+        <div class="fe-dim-track"><div class="fe-dim-fill" style="width:${pct}%;background:${c}"></div></div>
+        <div class="fe-dim-val" style="color:${c}">${v}/10</div>
+      </div>`;}).join('');
+  }
+
+  // ── Render: Filler section ──
+  const fillerCountEl=document.getElementById(`${prefix}-filler-count`);
+  const fillerMapEl=document.getElementById(`${prefix}-filler-map`);
+  const fillerAdvEl=document.getElementById(`${prefix}-filler-advice`);
+  if(fillerCountEl)fillerCountEl.textContent=analysis.fillerData.total>0?`${analysis.fillerData.total} detected`:'✓ Clean';
+  if(fillerMapEl){
+    if(analysis.fillerData.total===0){
+      fillerMapEl.innerHTML='<span class="filler-clean">✓ Zero filler words detected — excellent control</span>';
+    }else{
+      fillerMapEl.innerHTML=analysis.fillerData.list.map(([f,c])=>`<span class="filler-chip">"${f}" <span class="fc-count">×${c}</span></span>`).join('');
+    }
+  }
+  if(fillerAdvEl){
+    if(analysis.fillerData.total===0)fillerAdvEl.innerHTML='<p style="color:var(--green);font-size:13px">No fillers in this session. This is where mastery shows. Maintain this under pressure.</p>';
+    else{const topFiller=analysis.fillerData.list[0];fillerAdvEl.innerHTML=`<p style="font-size:13px;color:var(--muted)">Your most common filler: <strong style="color:var(--red)">"${topFiller[0]}"</strong> (×${topFiller[1]}). Each occurrence costs you approximately 0.5 points of perceived authority. The total cost of ${analysis.fillerData.total} fillers in this response: significant. The fix: replace every filler with a pause. The pause feels uncomfortable. That discomfort is the habit breaking.</p>`;}
+  }
+
+  // ── Render: Pace section ──
+  if(id==='drill'){
+    const paceEl=document.getElementById('fe-pace-detail');
+    if(paceEl){
+      let paceHTML='';
+      if(dur>0){paceHTML+=`<p><strong>Recording duration:</strong> ${fmtTime(dur)} (Target: ${fmtTime(dayData.drillTarget||90)})</p>`;}
+      if(analysis.wpm>0){
+        const paceStatus=analysis.wpm>=110&&analysis.wpm<=150?`<span style="color:var(--green)">✓ EXCELLENT (${analysis.wpm} WPM)</span>`:
+          analysis.wpm>150?`<span style="color:var(--orange)">⚠ TOO FAST (${analysis.wpm} WPM — aim for 110–150)</span>`:
+          `<span style="color:var(--gold)">△ SLIGHTLY SLOW (${analysis.wpm} WPM — aim for 110–150)</span>`;
+        paceHTML+=`<p><strong>Speaking pace:</strong> ${paceStatus}</p>`;
+        paceHTML+=`<p style="font-size:13px;color:var(--muted);margin-top:4px">Elite communicators speak at 110–150 WPM — fast enough to hold attention, slow enough for every word to land. ${analysis.wpm>150?'At your current pace, your audience is being asked to process faster than is comfortable. Slow down deliberately.':'Your pace allows words to land. Maintain this.'}</p>`;
+      }
+      if(analysis.words>0){paceHTML+=`<p style="margin-top:8px"><strong>Word count:</strong> ${analysis.words} words across ${analysis.sentences} sentence${analysis.sentences!==1?'s':''}. Avg sentence length: ${analysis.avgSentLen} words. ${analysis.avgSentLen>25?'<span style="color:var(--orange)">Sentences are long — aim for under 20 words per sentence in speech.</span>':analysis.avgSentLen>0?'<span style="color:var(--green)">Good sentence length for spoken delivery.</span>':''}</p>`;}
+      if(!paceHTML)paceHTML='<p style="color:var(--muted)">Record yourself using the microphone to get pace analysis. Transcript-only analysis cannot measure speaking speed.</p>';
+      paceEl.innerHTML=paceHTML;
+    }
+  }
+
+  // ── Render: Issues ──
+  const issuesEl=document.getElementById(`${prefix}-issues`);
+  if(issuesEl){
+    issuesEl.innerHTML=issues.map(iss=>`
+      <div class="issue-row sev-${iss.sev}">
+        <div class="ir-icon">${iss.icon}</div>
+        <div class="ir-body">
+          <h4>${iss.title}</h4>
+          <div class="what">${iss.what}</div>
+          ${iss.sev!=='pass'?`<div class="how">→ HOW TO FIX: ${iss.how}</div>`:''}
+          ${iss.example?`<div class="example">${iss.example}</div>`:''}
+        </div>
+      </div>`).join('')||'<div style="color:var(--muted);font-size:13px;padding:10px 0">Submit your transcript above to see detailed issues.</div>';
+  }
+
+  // ── Render: Elite Rewrite ──
+  if(id==='drill'){
+    const yourEl=document.getElementById('fe-your-text');const eliteEl=document.getElementById('fe-elite-text');const whyEl=document.getElementById('fe-why-better');
+    if(yourEl)yourEl.textContent=text||'[No transcript submitted — record and submit to see comparison]';
+    if(eliteEl){eliteEl.textContent=eliteText;window._currentElite=eliteText;}
+    if(whyEl)whyEl.innerHTML=`<p>${dayData.eliteReason||'Study the structure: the opening states the position, the body provides specific evidence, the close is the most memorable sentence. Every word earns its place.'}</p>`;
+  }else{
+    const yourEl=document.getElementById('pfe-your-text');const eliteEl=document.getElementById('pfe-elite-text');
+    if(yourEl)yourEl.textContent=text||'[No transcript submitted]';
+    if(eliteEl)eliteEl.textContent=eliteText;
+  }
+
+  // ── Render: Next Steps ──
+  if(id==='drill'){
+    const nsEl=document.getElementById('fe-next-steps');
+    if(nsEl){nsEl.innerHTML=nextSteps.map((s,i)=>`<div class="ns-item"><div class="ns-num">${i+1}</div><div class="ns-content"><h4>${s.title}</h4><p>${s.desc}</p><div class="drill-cue">→ ${s.drill}</div></div></div>`).join('');}
+  }
+
+  // Show feedback
+  const fbEl=document.getElementById(`${id}-feedback`);if(fbEl){fbEl.classList.add('show');fbEl.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+
+function copyElite(){
+  const text=window._currentElite||document.getElementById('fe-elite-text').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    if(btn){btn.textContent='✓ COPIED';setTimeout(()=>btn.textContent='COPY ELITE VERSION',2000);}
+  }).catch(()=>alert('Select and copy manually.'));
+}
+
+function skipDrill(){
+  document.getElementById('drill-transcript').value='Applied the technique. No transcript captured.';
+  analyseResponse('drill');
+}
+
+function redoDrillFromFeedback(){
+  resetDrill('drill');
+  document.getElementById('drill-feedback').classList.remove('show');
+  tab('drill',null);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════ COMPLETE DAY
+function completeDay(){
+  if(!S.done.includes(S.day))S.done.push(S.day);
+  if(S.done.includes(S.day-1)||S.day===1)S.streak=(S.streak||0)+1;
+  save();buildSidebar();updateHeader();
+  if(S.day<60){
+    if(confirm(`✓ Day ${S.day} complete! Streak: ${S.streak}\n\nProceed to Day ${S.day+1}?`)){
+      S.day++;save();loadDay(S.day);
+    }
+  }else{
+    alert('🏆 All 60 Days Complete.\n\nThe voice you command now is not the voice you arrived with.\nBegin again anytime — each cycle deepens the mastery.');
+  }
+}
+
+// ═══════════════════════ PROGRESS
+function updateProgressTab(){
+  const scores=S.scores.filter(Boolean);
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):'—';
+  document.getElementById('pg-done').textContent=S.done.length;
+  document.getElementById('pg-streak').textContent=S.streak;
+  document.getElementById('pg-avg').textContent=avg;
+  document.getElementById('pg-pct').textContent=Math.round((S.done.length/60)*100)+'%';
+  drawScoreChart('score-chart',scores);
+  const hm=document.getElementById('heatmap');if(hm){hm.innerHTML='';for(let i=1;i<=60;i++){const el=document.createElement('div');el.className='hm-cell'+(i===S.day?' cur':S.done.includes(i)?' done':'');el.textContent=i;el.onclick=()=>jumpDay(i);hm.appendChild(el);}}
+}
+function updateProgressScreen(){
+  const scores=S.scores.filter(Boolean);
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):'—';
+  document.getElementById('sp-done').textContent=S.done.length;
+  document.getElementById('sp-streak').textContent=S.streak;
+  document.getElementById('sp-avg').textContent=avg;
+  document.getElementById('sp-pct').textContent=Math.round((S.done.length/60)*100)+'%';
+  drawScoreChart('score-chart-2',scores);
+  const hm=document.getElementById('heatmap2');if(hm){hm.innerHTML='';for(let i=1;i<=60;i++){const el=document.createElement('div');el.className='hm-cell'+(i===S.day?' cur':S.done.includes(i)?' done':'');el.textContent=i;el.onclick=()=>{jumpDay(i);showMain('session');};hm.appendChild(el);}}
+}
+function drawScoreChart(canvasId,scores){
+  const canvas=document.getElementById(canvasId);if(!canvas||!scores.length)return;
+  const ctx=canvas.getContext('2d');const W=canvas.offsetWidth||700,H=canvas.height||80;
+  canvas.width=W;ctx.clearRect(0,0,W,H);
+  const pad=8;const step=W/(scores.length>1?scores.length-1:1);
+  [25,50,75].forEach(v=>{const y=H-pad-(v/100)*(H-pad*2);ctx.strokeStyle='rgba(200,168,75,.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();});
+  ctx.strokeStyle='rgba(200,168,75,.7)';ctx.lineWidth=2;ctx.beginPath();
+  scores.forEach((s,i)=>{const x=i*step,y=H-pad-(s/100)*(H-pad*2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.stroke();
+  scores.forEach((s,i)=>{const x=i*step,y=H-pad-(s/100)*(H-pad*2);const c=s>=80?'#2ecc71':s>=60?'#c8a84b':s>=40?'#e67e22':'#e74c3c';ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();});
+}
+</script>
+</body>
+</html>
